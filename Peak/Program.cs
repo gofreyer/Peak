@@ -20,16 +20,34 @@ namespace Peak
             Console.WriteLine(board.DebugDirections(3,4));
             Console.WriteLine("\n");
             Console.WriteLine(board.DebugIntermediateDistances(3,4));
-            board.ApplyMove(new Move(new Position(3, 4,board), new Position(0, 4,board),board));
+
+            Move move = new Move(new Position(3, 4, board), new Position(0, 4, board), board);
+            board.ApplyMove(move);
             Console.WriteLine("\n");
             Console.WriteLine(board);
+            board.NegateMove(move);
+            Console.WriteLine("\n");
+            Console.WriteLine(board);
+
+            /*
+            board.ApplyMove(new Move(new Position(3, 4, board), new Position(0, 4, board), board));
+            Console.WriteLine("\n");
+            Console.WriteLine(board);
+
             board.ApplyMove(new Move(new Position(0, 5, board), new Position(0, 3, board), board));
             Console.WriteLine("\n");
             Console.WriteLine(board);
             Console.WriteLine("\n");
             Console.WriteLine("\n");
             Console.WriteLine("\n");
-            Console.WriteLine(newBoard);
+            //Console.WriteLine(newBoard);
+            Console.WriteLine("Possible Moves of WHITE:\n");
+            Console.WriteLine(board.DebugPossibleMoves(GameBoard.Player.White));
+            Console.WriteLine("\n");
+            Console.WriteLine("Possible Moves of BLACK:\n");
+            Console.WriteLine(board.DebugPossibleMoves(GameBoard.Player.Black));
+            Console.WriteLine("\n");
+            */
 
             Console.ReadKey();
         }

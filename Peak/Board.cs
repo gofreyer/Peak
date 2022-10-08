@@ -52,6 +52,22 @@ namespace Peak
             X = x;
             Y = y;
         }
+        public Position(Position pos)
+        {
+            X = pos.X;
+            Y = pos.Y;
+            MyBoard = pos.MyBoard;
+        }
+        public override string ToString()
+        {
+            string output = $"Row[{Y}]Col[{X}]";
+
+            return output;
+        }
+        public bool IsEqual(Position pos)
+        {
+            return (pos.X == X && pos.Y == Y);
+        }
     }
     class Move
     {
@@ -64,11 +80,34 @@ namespace Peak
         private GameBoard MyBoard { set; get; }
         public Position From { get; set; }
         public Position To { get; set; }
+        public int PreValueFrom { get; set; }
+        public int PostValueFrom { get; set; }
+        public int PreValueTo { get; set; }
+        public int PostValueTo { get; set; }
+        public bool Applied { get; set; }
+
         public Move(Position from, Position to, GameBoard g)
         {
             MyBoard = g;
             From = from;
             To = to;
+            PreValueFrom = 0;
+            PostValueFrom = 0;
+            PreValueTo = 0;
+            PostValueTo = 0;
+            Applied = false;
+        }
+        public Move(Move move)
+        {
+            MyBoard = move.MyBoard;
+            From = new Position(move.From);
+            To = new Position(move.To);
+            
+            PreValueFrom = move.PreValueFrom;
+            PostValueFrom = move.PostValueFrom;
+            PreValueTo = move.PreValueTo;
+            PostValueTo = move.PostValueTo;
+            Applied = move.Applied;
         }
         public bool IsValid()
         {
@@ -97,6 +136,16 @@ namespace Peak
             else if (From.X > To.X && From.Y < To.Y) return Direction.SW;
             else return Direction.INVALID;
         }
+        public override string ToString()
+        {
+            string output = $"{From.ToString()} -> {To.ToString()} {MyBoard.Board[To.Y,To.X]}+1";
+
+            return output;
+        }
+        public bool IsEqual(Move move)
+        {
+            return (move.From.IsEqual(From) && move.To.IsEqual(To));
+        }
     }
     class GameBoard
     {
@@ -106,8 +155,9 @@ namespace Peak
             Black
         }
         
-        private const int DIM = 10;
+        private const int DIM = 6;
         public int[,] Board { get; set; }
+        public Stack<Move> LastMoves { get; set; }
         public int GetDim()
         {
             return DIM;
@@ -116,6 +166,7 @@ namespace Peak
         public GameBoard()
         {
             Board = new int[DIM,DIM];
+            LastMoves = new Stack<Move>();
             Init();
         }
         public GameBoard(GameBoard g)
@@ -128,6 +179,7 @@ namespace Peak
                     Board[r, c] = g.Board[r, c];
                 }
             }
+            LastMoves = new Stack<Move>(g.LastMoves);
         }
         
         public int GetInitValue(Player player)
@@ -137,6 +189,43 @@ namespace Peak
         public Player ChangePlayer(Player player)
         {
             return (player == Player.White) ? Player.Black : Player.White;
+        }
+        public List<Move> GetPossibleMoves(Player player)
+        {
+            List<Move> possibleMoves = new List<Move>();
+
+            int startChip = GetInitValue(player);
+
+            for (int r = 0; r < DIM; r++)
+            {
+                for (int c = 0; c < DIM; c++)
+                {
+                    if (Board[r,c] == startChip)
+                    {
+                        List<Move> movesFromPosition = GetPossibleMoves(player, new Position(r, c, this));
+                        possibleMoves.AddRange(movesFromPosition);
+                    }
+                }
+            }
+
+            return possibleMoves;
+        }
+        public List<Move> GetPossibleMoves(Player player, Position pos)
+        {
+            List<Move> possibleMoves = new List<Move>();
+
+            for (int r = 0; r < DIM; r++)
+            {
+                for (int c = 0; c < DIM; c++)
+                {
+                    Move move = new Move(pos, new Position(r, c, this), this);
+                    if (move.IsValid())
+                    {
+                        possibleMoves.Add(move);
+                    }
+                }
+            }
+            return possibleMoves;
         }
 
         public void Init()
@@ -165,12 +254,38 @@ namespace Peak
         }
         public bool ApplyMove(Move move)
         {
-            if (move.IsValid())
+            if (move.IsValid() && move.Applied == false)
             {
+                move.PreValueFrom = Board[move.From.Y, move.From.X];
+                move.PreValueTo = Board[move.To.Y, move.To.X];
+
                 int sign = (Board[move.From.Y, move.From.X] >= 0) ? 1 : -1;
                 Board[move.From.Y, move.From.X] = 0;
                 int currentWeight = Board[move.To.Y, move.To.X];
                 Board[move.To.Y, move.To.X] = (Math.Abs(currentWeight) + 1) * sign;
+
+                move.PostValueFrom = Board[move.From.Y, move.From.X];
+                move.PostValueTo = Board[move.To.Y, move.To.X];
+
+                move.Applied = true;
+
+                LastMoves.Push(move);
+
+                return true;
+            }
+            return false;
+        }
+        public bool NegateMove(Move move)
+        {
+            if (LastMoves.Count > 0 && move.Applied == true && move.IsEqual(LastMoves.Peek()))
+            {
+                Board[move.From.Y, move.From.X] = move.PreValueFrom;
+                Board[move.To.Y, move.To.X] = move.PreValueTo;
+
+                move.Applied = false;
+
+                LastMoves.Pop();
+
                 return true;
             }
             return false;
@@ -374,6 +489,39 @@ namespace Peak
                 output += "\n";
             }
 
+            return output;
+        }
+
+        public string DebugPossibleMoves(Player player, int row, int col)
+        {
+            Position fromPos = new Position(row, col, this);
+            string output = "";
+
+            List<Move> possibleMoves = GetPossibleMoves(player, fromPos);
+
+            output = DebugMoves(possibleMoves);
+            
+            return output;
+        }
+        public string DebugPossibleMoves(Player player)
+        {
+            string output = "";
+
+            List<Move> possibleMoves = GetPossibleMoves(player);
+
+            output = DebugMoves(possibleMoves);
+
+            return output;
+        }
+        public string DebugMoves(List<Move> moves)
+        {
+            string output = "";
+
+            foreach(Move move in moves)
+            {
+                output += move.ToString() + "\n";
+            }
+            
             return output;
         }
     }
