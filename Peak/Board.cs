@@ -171,6 +171,7 @@ namespace Peak
         private const int DIM = 6;
         public int[,] Board { get; set; }
         public int[] Scoring { get; set; }
+        public int[] Passing { get; set; }
         public Stack<IMove> LastMoves { get; set; }
         public Player NextPlayer { get; set; }
         public int GetDim()
@@ -207,6 +208,7 @@ namespace Peak
             Board = new int[DIM, DIM];
             LastMoves = new Stack<IMove>();
             Scoring = new int[3];
+            Passing = new int[2] { 0, 0 };
             Init();
             Evaluation();
             NextPlayer = nextPlayer;
@@ -223,17 +225,62 @@ namespace Peak
             }
             LastMoves = new Stack<IMove>(g.LastMoves);
             Scoring = new int[3];
+            Passing = new int[2] { g.Passing[0], g.Passing[1] };
             Evaluation();
             NextPlayer = g.NextPlayer;
         }
+        public void Pass(Player player,bool setPass=true)
+        {
+            if (setPass)
+            {
+                Passing[(int)player]++;
+            }
+            else
+            {
+                Passing[(int)player] = 0;
+            }
+            
+        }
         public bool CheckWin(Player player)
         {
-            List<IMove> moves = GetPossibleMoves(player == Player.White ? Player.Black : Player.White);
-            if (moves.Count == 0)
+            /*
+            Player otherPlayer = (player == Player.White) ? Player.Black : Player.White;
+            if (Passing[(int)otherPlayer] >= 2) return true;
+
+            List<IMove> moves = GetPossibleMoves(otherPlayer);
+            if (moves.Count == 0 && Passing[(int)otherPlayer] > 0)
             {
                 int score = Evaluation();
                 if (player == Player.White && score > 0) return true;
                 if (player == Player.Black && score < 0) return true;
+            }
+            */
+            return false;
+        }
+        public bool GameOver(out Player winner, out int score)
+        {
+            winner = Player.None;
+            score = 0;
+            if (Passing[(int)Player.White] > 1 || Passing[(int)Player.Black] > 1 || (Passing[(int)Player.White]==1 && Passing[(int)Player.Black] == 1))
+            {
+                if (Math.Abs(Scoring[(int)Player.White]) > Math.Abs(Scoring[(int)Player.Black]))
+                {
+                    winner = Player.White;
+                    score = Math.Abs(Scoring[(int)Player.White]);
+                    return true;
+                }
+                if (Math.Abs(Scoring[(int)Player.White]) < Math.Abs(Scoring[(int)Player.Black]))
+                {
+                    winner = Player.Black;
+                    score = Math.Abs(Scoring[(int)Player.Black]);
+                    return true;
+                }
+                else
+                {
+                    winner = Player.None;
+                    score = Math.Abs(Scoring[(int)Player.White]);
+                    return true;
+                }
             }
             return false;
         }
