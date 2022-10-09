@@ -69,7 +69,7 @@ namespace Peak
             return (pos.X == X && pos.Y == Y);
         }
     }
-    class Move
+    class Move : IMove
     {
         public enum Direction
         {
@@ -116,6 +116,7 @@ namespace Peak
             {
                 return false;
             }
+
             int intermediateDistance = MyBoard.GetIntermediateDistance(From, To, dir);
             
             return (intermediateDistance==2);
@@ -142,32 +143,73 @@ namespace Peak
 
             return output;
         }
-        public bool IsEqual(Move move)
+        public bool IsEqual(IMove _move)
         {
+            Move move = (Move)_move;
             return (move.From.IsEqual(From) && move.To.IsEqual(To));
         }
-    }
-    class GameBoard
-    {
-        public enum Player
+        public void PreMove()
         {
-            White,
-            Black
+            PreValueFrom = MyBoard.Board[From.Y, From.X];
+            PreValueTo = MyBoard.Board[To.Y, To.X];
         }
+        public void PostMove()
+        {
+            PostValueFrom = MyBoard.Board[From.Y, From.X];
+            PostValueTo = MyBoard.Board[To.Y, To.X];
+        }
+        public void Undo()
+        {
+            MyBoard.Board[From.Y, From.X] = PreValueFrom;
+            MyBoard.Board[To.Y, To.X] = PreValueTo;
+        }
+    }
+    class GameBoard : IBoard
+    {
+        private const int TOTAL = 2;
         
         private const int DIM = 6;
         public int[,] Board { get; set; }
-        public Stack<Move> LastMoves { get; set; }
+        public int[] Scoring { get; set; }
+        public Stack<IMove> LastMoves { get; set; }
+        public Player NextPlayer { get; set; }
         public int GetDim()
         {
             return DIM;
         }
-
-        public GameBoard()
+        public void Test()
         {
-            Board = new int[DIM,DIM];
-            LastMoves = new Stack<Move>();
+            /*
+            Board = new int[DIM, DIM]
+                {
+                { 0,0,0,2,0,0 },
+                { 0,0,0,-2,-3,0},
+                { 0,-2,2,-3,-2,0 },
+                { 0,2,0,-3,2,-1},
+                { 1,3,2,0,0,1},
+                { 0,-1,1,1,0,2}
+            };
+            */
+            Board = new int[DIM, DIM]
+                {
+                { 0,0,0,2,-2,0 },
+                { 0,0,0,-2,-3,-1},
+                { 0,1,0,-1,1,1 },
+                { 0,2,1,-2,-1,2},
+                { -2,1,2,-1,1,1},
+                { -1,-1,1,1,-1,-1}
+            };
+            NextPlayer = Player.Black;
+        }
+
+        public GameBoard(Player nextPlayer = Player.White)
+        {
+            Board = new int[DIM, DIM];
+            LastMoves = new Stack<IMove>();
+            Scoring = new int[3];
             Init();
+            Evaluation();
+            NextPlayer = nextPlayer;
         }
         public GameBoard(GameBoard g)
         {
@@ -179,20 +221,40 @@ namespace Peak
                     Board[r, c] = g.Board[r, c];
                 }
             }
-            LastMoves = new Stack<Move>(g.LastMoves);
+            LastMoves = new Stack<IMove>(g.LastMoves);
+            Scoring = new int[3];
+            Evaluation();
+            NextPlayer = g.NextPlayer;
         }
-        
+        public bool CheckWin(Player player)
+        {
+            List<IMove> moves = GetPossibleMoves(player == Player.White ? Player.Black : Player.White);
+            if (moves.Count == 0)
+            {
+                int score = Evaluation();
+                if (player == Player.White && score > 0) return true;
+                if (player == Player.Black && score < 0) return true;
+            }
+            return false;
+        }
+
         public int GetInitValue(Player player)
         {
             return (player == Player.White) ? 1 : -1;
         }
-        public Player ChangePlayer(Player player)
+        public void ChangePlayer()
         {
-            return (player == Player.White) ? Player.Black : Player.White;
+            NextPlayer = (NextPlayer == Player.White) ? Player.Black : Player.White;
         }
-        public List<Move> GetPossibleMoves(Player player)
+        public List<IMove> MakeMoveList(out int count)
         {
-            List<Move> possibleMoves = new List<Move>();
+            List<IMove> moves = GetPossibleMoves(NextPlayer);
+            count = moves.Count;
+            return moves;
+        }
+        public List<IMove> GetPossibleMoves(Player player)
+        {
+            List<IMove> possibleMoves = new List<IMove>();
 
             int startChip = GetInitValue(player);
 
@@ -202,7 +264,7 @@ namespace Peak
                 {
                     if (Board[r,c] == startChip)
                     {
-                        List<Move> movesFromPosition = GetPossibleMoves(player, new Position(r, c, this));
+                        List<IMove> movesFromPosition = GetPossibleMoves(player, new Position(r, c, this));
                         possibleMoves.AddRange(movesFromPosition);
                     }
                 }
@@ -210,15 +272,15 @@ namespace Peak
 
             return possibleMoves;
         }
-        public List<Move> GetPossibleMoves(Player player, Position pos)
+        public List<IMove> GetPossibleMoves(Player player, Position pos)
         {
-            List<Move> possibleMoves = new List<Move>();
+            List<IMove> possibleMoves = new List<IMove>();
 
             for (int r = 0; r < DIM; r++)
             {
                 for (int c = 0; c < DIM; c++)
                 {
-                    Move move = new Move(pos, new Position(r, c, this), this);
+                    IMove move = new Move(pos, new Position(r, c, this), this);
                     if (move.IsValid())
                     {
                         possibleMoves.Add(move);
@@ -230,65 +292,57 @@ namespace Peak
 
         public void Init()
         {
-            Player player = Player.White;
-            int chip = GetInitValue(player);
+            NextPlayer = Player.White;
+            int chip = GetInitValue(NextPlayer);
             for (int r = 0; r < DIM; r++)
             {
                 for (int c = 0; c < DIM; c++)
                 {
                     if (r % 2 == 1 && c == 0)
                     {
-                        player = Player.White;
+                        NextPlayer = Player.White;
                     }
                     else if (r % 2 == 0 && c == 0)
                     {
-                        player = Player.Black;
+                        NextPlayer = Player.Black;
                     }
-                    player = ChangePlayer(player);
-                    chip = GetInitValue(player);
+                    ChangePlayer();
+                    chip = GetInitValue(NextPlayer);
                     Board[r, c] = chip;
                     Board[r, c+1] = chip;
                     c++;
                 }
             }
         }
-        public bool ApplyMove(Move move)
+        void ApplyMove(IMove _move)
+        {
+            Move move = (Move)_move;
+            int sign = (Board[move.From.Y, move.From.X] >= 0) ? 1 : -1;
+            Board[move.From.Y, move.From.X] = 0;
+            int currentWeight = Board[move.To.Y, move.To.X];
+            Board[move.To.Y, move.To.X] = (Math.Abs(currentWeight) + 1) * sign;
+        }
+        public void DoMove(IMove move)
         {
             if (move.IsValid() && move.Applied == false)
             {
-                move.PreValueFrom = Board[move.From.Y, move.From.X];
-                move.PreValueTo = Board[move.To.Y, move.To.X];
-
-                int sign = (Board[move.From.Y, move.From.X] >= 0) ? 1 : -1;
-                Board[move.From.Y, move.From.X] = 0;
-                int currentWeight = Board[move.To.Y, move.To.X];
-                Board[move.To.Y, move.To.X] = (Math.Abs(currentWeight) + 1) * sign;
-
-                move.PostValueFrom = Board[move.From.Y, move.From.X];
-                move.PostValueTo = Board[move.To.Y, move.To.X];
-
+                move.PreMove();
+                ApplyMove(move);
+                move.PostMove();
                 move.Applied = true;
-
                 LastMoves.Push(move);
-
-                return true;
+                ChangePlayer();
             }
-            return false;
         }
-        public bool NegateMove(Move move)
+        public void UndoMove(IMove move)
         {
             if (LastMoves.Count > 0 && move.Applied == true && move.IsEqual(LastMoves.Peek()))
             {
-                Board[move.From.Y, move.From.X] = move.PreValueFrom;
-                Board[move.To.Y, move.To.X] = move.PreValueTo;
-
+                move.Undo();
                 move.Applied = false;
-
                 LastMoves.Pop();
-
-                return true;
+                ChangePlayer();
             }
-            return false;
         }
         public int GetIntermediateDistance(Position From, Position To, Move.Direction dir)
         {
@@ -300,7 +354,7 @@ namespace Peak
                 return 0;
             }
                                     
-            if (Math.Abs(Board[row,col]) != 1)
+            if (Math.Abs(Board[row,col]) != 1 || Math.Abs(Board[To.Y, To.X]) == 0)
             {
                 return 0;
             }
@@ -381,6 +435,29 @@ namespace Peak
                     break;
             }
             return intermediateDistance;
+        }
+
+        public int Evaluation()
+        {
+            Scoring[(int)Player.White] = 0;
+            Scoring[(int)Player.Black] = 0;
+            Scoring[TOTAL] = 0;
+            for (int r = 0; r < DIM; r++)
+            {
+                for (int c = 0; c < DIM; c++)
+                {
+                    Scoring[TOTAL] += Board[r, c];
+                    if (Board[r, c] >= 0)
+                    {
+                        Scoring[(int)Player.White] += Board[r, c];
+                    }
+                    else
+                    {
+                        Scoring[(int)Player.Black] += Math.Abs(Board[r, c]);
+                    }
+                }
+            }
+            return Scoring[TOTAL];
         }
         public override string ToString()
         {
@@ -497,7 +574,7 @@ namespace Peak
             Position fromPos = new Position(row, col, this);
             string output = "";
 
-            List<Move> possibleMoves = GetPossibleMoves(player, fromPos);
+            List<IMove> possibleMoves = GetPossibleMoves(player, fromPos);
 
             output = DebugMoves(possibleMoves);
             
@@ -507,17 +584,17 @@ namespace Peak
         {
             string output = "";
 
-            List<Move> possibleMoves = GetPossibleMoves(player);
+            List<IMove> possibleMoves = GetPossibleMoves(player);
 
             output = DebugMoves(possibleMoves);
 
             return output;
         }
-        public string DebugMoves(List<Move> moves)
+        public string DebugMoves(List<IMove> moves)
         {
             string output = "";
 
-            foreach(Move move in moves)
+            foreach(IMove move in moves)
             {
                 output += move.ToString() + "\n";
             }
