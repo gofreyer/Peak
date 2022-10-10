@@ -243,26 +243,25 @@ namespace Peak
         }
         public bool CheckWin(Player player)
         {
-            /*
-            Player otherPlayer = (player == Player.White) ? Player.Black : Player.White;
-            if (Passing[(int)otherPlayer] >= 2) return true;
-
-            List<IMove> moves = GetPossibleMoves(otherPlayer);
-            if (moves.Count == 0 && Passing[(int)otherPlayer] > 0)
+            Player otherPlayer = OtherPlayer(player);
+            if (Passing[(int)Player.White] > 1 || Passing[(int)Player.Black] > 1 || (Passing[(int)Player.White] == 1 && Passing[(int)Player.Black] == 1))
             {
                 int score = Evaluation();
                 if (player == Player.White && score > 0) return true;
                 if (player == Player.Black && score < 0) return true;
             }
-            */
             return false;
         }
-        public bool GameOver(out Player winner, out int score)
+        public bool GameOver(out Player winner, out int score, out int whitescore, out int blackscore, out int totalscore)
         {
             winner = Player.None;
-            score = 0;
+            score = whitescore = blackscore = totalscore = 0;
             if (Passing[(int)Player.White] > 1 || Passing[(int)Player.Black] > 1 || (Passing[(int)Player.White]==1 && Passing[(int)Player.Black] == 1))
             {
+                Evaluation();
+                whitescore = Scoring[(int)Player.White];
+                blackscore = Scoring[(int)Player.Black];
+                totalscore = Scoring[(int)Player.None];
                 if (Math.Abs(Scoring[(int)Player.White]) > Math.Abs(Scoring[(int)Player.Black]))
                 {
                     winner = Player.White;
@@ -292,6 +291,10 @@ namespace Peak
         public void ChangePlayer()
         {
             NextPlayer = (NextPlayer == Player.White) ? Player.Black : Player.White;
+        }
+        public Player OtherPlayer(Player player)
+        {
+            return (player == Player.White ? Player.Black : Player.White);
         }
         public List<IMove> MakeMoveList(out int count)
         {
@@ -493,14 +496,15 @@ namespace Peak
             {
                 for (int c = 0; c < DIM; c++)
                 {
-                    Scoring[TOTAL] += Board[r, c];
-                    if (Board[r, c] >= 0)
+                    if (Board[r, c] > 1)
                     {
                         Scoring[(int)Player.White] += Board[r, c];
+                        Scoring[TOTAL] += Board[r, c];
                     }
-                    else
+                    else if (Board[r, c] < -1)
                     {
                         Scoring[(int)Player.Black] += Math.Abs(Board[r, c]);
+                        Scoring[TOTAL] += Board[r, c];
                     }
                 }
             }

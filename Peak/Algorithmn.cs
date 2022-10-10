@@ -37,7 +37,22 @@ namespace Peak
 	internal class Algorithmn
     {
 		private static Random random = new Random();
-        public static int MiniMax(IBoard board, int depth, out IMove bestmove)
+        public static void RandomMove(IBoard board, out IMove move)
+        {
+            move = null;
+            int n = 0;
+            List<IMove> nextMoves = board.MakeMoveList(out n);
+            if (n > 0)
+            {
+                int m = 0;
+                if (n > 1)
+                {
+                    m = random.Next(n);     // creates a number between 0 and n
+                }
+                move = nextMoves[m];
+            }
+        }
+        public static int MinMaxMove(IBoard board, int depth, out IMove bestmove)
 		{
             bestmove = null;
 			int value = 0;
@@ -59,14 +74,15 @@ namespace Peak
             List<IMove> bestMoves = new List<IMove>();
             if (n == 0)
 			{
-				return bestValue;
+                bestValue = board.Evaluation();
+                return bestValue;
             }
             for (int i = 0; i < n; i++)
             {
 				IMove move = nextMoves[i];
 				board.DoMove(move);
 				IMove nextbestmove;
-                value = MiniMax(board, depth - 1,out nextbestmove);
+                value = MinMaxMove(board, depth - 1,out nextbestmove);
                 board.UndoMove(move);
 
 				if (board.NextPlayer == Player.White)
@@ -111,7 +127,8 @@ namespace Peak
 			else
 			{
 				bestmove = null;
-			}
+                bestValue = board.Evaluation();
+            }
 			return bestValue;
         }
     }

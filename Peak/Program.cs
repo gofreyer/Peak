@@ -66,6 +66,7 @@ namespace Peak
 
             for (int runningtime = 0; runningtime < 100; runningtime++)
             {
+                // MinMaxMove
                 int count = 0;
                 board.MakeMoveList(out count);
                 int depth = 1;
@@ -73,10 +74,19 @@ namespace Peak
                 {
                     depth = (int)Math.Round((1.0 / (float)count) * 80.0);
                     if (depth < 2) depth = 2;
-                    if (depth > 6) depth = 6;
+                    if (depth > 5) depth = 5;
                 }
+                /*
+                // Black is the weaker player
+                if (board.NextPlayer == Player.Black) depth = 1;
+                */
+                Algorithmn.MinMaxMove(board,depth, out bestMove);
                 
-                Algorithmn.MiniMax(board,depth, out bestMove);
+                /*
+                // RandomMove
+                Algorithmn.RandomMove(board, out bestMove);
+                */
+
                 if (bestMove != null)
                 {
                     Player currentPlayer = board.NextPlayer;
@@ -98,9 +108,9 @@ namespace Peak
                     //break;
                 }
 
-                Player winner;
-                int score;
-                if (board.GameOver(out winner, out score))
+                Player winner, theOther;
+                int score, whitescore, blackscore, totalscore;
+                if (board.GameOver(out winner, out score, out whitescore, out blackscore, out totalscore))
                 {
                     if (winner == Player.None)
                     {
@@ -109,7 +119,10 @@ namespace Peak
                     }
                     else
                     {
-                        Console.WriteLine($"After {runningtime}: {winner} wins with the score of {score}!");
+                        theOther = board.OtherPlayer(winner);
+                        int theOtherScore = (score == Math.Abs(whitescore)) ? Math.Abs(blackscore) : Math.Abs(whitescore);
+                        Console.WriteLine($"{winner} wins with the score of {score}!\n");
+                        Console.WriteLine($"{theOther} has a score of {theOtherScore}!");
                         Console.WriteLine("\n");
                     }
                     
