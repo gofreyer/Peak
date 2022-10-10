@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PeakDesktop"
         mc:Ignorable="d"
-        Title="Peak Desktop" Height="800" Width="800">
+        Title="Peak Desktop" Height="700" Width="800">
     <Window.Resources>
         <Style TargetType="Label">
 
@@ -18,7 +18,7 @@
         <Style TargetType="Button" x:Key="CellStyle">
 
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush" Value="DarkGray" />
             <Setter Property="FontSize" Value="65" />
 
@@ -37,69 +37,76 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" Name="GameInformationLabel"/>
-        <Grid Grid.Row="1" Name="FieldGrid">
+        <Label Grid.Row="0" Grid.Column="0" Name="GameInformationLabel"/>
+        <Grid Grid.Row="1" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Button Click="Button_Click" Name="Button0_0" Grid.Column="0" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button0_1" Grid.Column="0" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button0_2" Grid.Column="0" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button0_3" Grid.Column="0" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button0_4" Grid.Column="0" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button0_5" Grid.Column="0" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+            <Grid Grid.Row="0" Grid.Column="0" Name="FieldGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button Click="Button_Click" Name="Button0_0" Grid.Column="0" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button0_1" Grid.Column="0" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button0_2" Grid.Column="0" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button0_3" Grid.Column="0" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button0_4" Grid.Column="0" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button0_5" Grid.Column="0" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
 
-            <Button Click="Button_Click" Name="Button1_0" Grid.Column="1" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button1_1" Grid.Column="1" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button1_2" Grid.Column="1" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button1_3" Grid.Column="1" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button1_4" Grid.Column="1" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button1_5" Grid.Column="1" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+                <Button Click="Button_Click" Name="Button1_0" Grid.Column="1" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button1_1" Grid.Column="1" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button1_2" Grid.Column="1" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button1_3" Grid.Column="1" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button1_4" Grid.Column="1" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button1_5" Grid.Column="1" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
 
-            <Button Click="Button_Click" Name="Button2_0" Grid.Column="2" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button2_1" Grid.Column="2" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button2_2" Grid.Column="2" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button2_3" Grid.Column="2" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button2_4" Grid.Column="2" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button2_5" Grid.Column="2" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+                <Button Click="Button_Click" Name="Button2_0" Grid.Column="2" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button2_1" Grid.Column="2" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button2_2" Grid.Column="2" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button2_3" Grid.Column="2" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button2_4" Grid.Column="2" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button2_5" Grid.Column="2" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
 
-            <Button Click="Button_Click" Name="Button3_0" Grid.Column="3" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button3_1" Grid.Column="3" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button3_2" Grid.Column="3" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button3_3" Grid.Column="3" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button3_4" Grid.Column="3" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button3_5" Grid.Column="3" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+                <Button Click="Button_Click" Name="Button3_0" Grid.Column="3" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button3_1" Grid.Column="3" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button3_2" Grid.Column="3" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button3_3" Grid.Column="3" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button3_4" Grid.Column="3" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button3_5" Grid.Column="3" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
 
-            <Button Click="Button_Click" Name="Button4_0" Grid.Column="4" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button4_1" Grid.Column="4" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button4_2" Grid.Column="4" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button4_3" Grid.Column="4" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button4_4" Grid.Column="4" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button4_5" Grid.Column="4" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+                <Button Click="Button_Click" Name="Button4_0" Grid.Column="4" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button4_1" Grid.Column="4" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button4_2" Grid.Column="4" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button4_3" Grid.Column="4" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button4_4" Grid.Column="4" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button4_5" Grid.Column="4" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
 
-            <Button Click="Button_Click" Name="Button5_0" Grid.Column="5" Grid.Row="0" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button5_1" Grid.Column="5" Grid.Row="1" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button5_2" Grid.Column="5" Grid.Row="2" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button5_3" Grid.Column="5" Grid.Row="3" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button5_4" Grid.Column="5" Grid.Row="4" Style="{StaticResource CellStyle}"/>
-            <Button Click="Button_Click" Name="Button5_5" Grid.Column="5" Grid.Row="5" Style="{StaticResource CellStyle}"/>
+                <Button Click="Button_Click" Name="Button5_0" Grid.Column="5" Grid.Row="0" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button5_1" Grid.Column="5" Grid.Row="1" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button5_2" Grid.Column="5" Grid.Row="2" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button5_3" Grid.Column="5" Grid.Row="3" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button5_4" Grid.Column="5" Grid.Row="4" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+                <Button Click="Button_Click" Name="Button5_5" Grid.Column="5" Grid.Row="5" Style="{StaticResource CellStyle}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="1" Name="GamePanel">
+            </Grid>
         </Grid>
-        <Button Click="StartButton_Click" Name="StartButton" Grid.Row="2" Style="{StaticResource ButtonStyle}">
-            Neues Spiel starten
+        <Button Click="StartButton_Click" Name="StartButton" Grid.Row="2" Grid.Column="0" Style="{StaticResource ButtonStyle}">
+            New
         </Button>
-
     </Grid>
 </Window>
