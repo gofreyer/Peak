@@ -5,7 +5,7 @@ https://www.spielewerkstatt.eu/de/startseite/187-peak.html
 
 https://www.jungundaltspielt.de/hoch-hinaus-peak-rezension/
 
-The game
+The game of <strong>Peak</strong>
 
 The wooden board game "Peak" is a 2-person game by Andreas Kuhnekath-Häbler and published by Gerhards Spiel und Design.
 
