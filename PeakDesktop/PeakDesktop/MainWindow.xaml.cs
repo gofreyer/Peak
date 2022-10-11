@@ -26,32 +26,47 @@ namespace PeakDesktop
             Init();
         }
 
+        private GameBoard PeakBoard { get; set; }
+
         private void Init()
+        {
+            PeakBoard = new GameBoard();
+
+            DrawBoard();
+        }
+        private void DrawBoard()
         {
             Style styleRedButton = this.FindResource("RedButton") as Style;
             Style styleBlueButton = this.FindResource("BlueButton") as Style;
+            Style styleBlankButton = this.FindResource("BlankButton") as Style;
 
-            List<Style> styles = new List<Style>{ styleRedButton, styleBlueButton };
-
-            int counter = 0;
             for (int row = 0; row < 6; row++)
             {
-                if (row%2 == 0)
-                {
-                    counter = 0;
-                }
-                else
-                {
-                    counter = 1;
-                }
                 for (int col = 0; col < 6; col++)
                 {
                     Button button = (Button)GetGridElement(FieldGrid, row, col);
                     if (button != null)
                     {
-                        button.Style = styles[counter % 2];
-                        counter++;
-                        button.Content = $"[{row},{col}]";
+                        int chip = PeakBoard.GetAt(row, col);
+                        string val = "";
+                        if (Math.Abs(chip) >= 2)
+                        {
+                            val = $"{Math.Abs(chip)}";
+                        }
+                        button.Content = val;
+
+                        if (chip > 0)
+                        {
+                            button.Style = styleRedButton;
+                        }
+                        else if (chip < 0)
+                        {
+                            button.Style = styleBlueButton;
+                        }
+                        else
+                        {
+                            button.Style = styleBlankButton;
+                        }
                     }
                 }
             }
