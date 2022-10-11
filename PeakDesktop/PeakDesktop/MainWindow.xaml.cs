@@ -23,6 +23,38 @@ namespace PeakDesktop
         public MainWindow()
         {
             InitializeComponent();
+            Init();
+        }
+
+        private void Init()
+        {
+            Style styleRedButton = this.FindResource("RedButton") as Style;
+            Style styleBlueButton = this.FindResource("BlueButton") as Style;
+
+            List<Style> styles = new List<Style>{ styleRedButton, styleBlueButton };
+
+            int counter = 0;
+            for (int row = 0; row < 6; row++)
+            {
+                if (row%2 == 0)
+                {
+                    counter = 0;
+                }
+                else
+                {
+                    counter = 1;
+                }
+                for (int col = 0; col < 6; col++)
+                {
+                    Button button = (Button)GetGridElement(FieldGrid, row, col);
+                    if (button != null)
+                    {
+                        button.Style = styles[counter % 2];
+                        counter++;
+                        button.Content = $"[{row},{col}]";
+                    }
+                }
+            }
         }
         private void GetButtonGridPosition(object sender, out int row, out int column)
         {
@@ -47,8 +79,41 @@ namespace PeakDesktop
         {
             if (bFrame)
             {
+                /*
                 button.BorderThickness = new Thickness(6);
                 button.BorderBrush = Brushes.Yellow;
+                */
+                MoveHelper.SetIsFrame(button, true);
+            }
+            else
+            {
+                /*
+                button.BorderThickness = new Thickness(1);
+                button.BorderBrush = Brushes.DarkGray;
+                */
+                MoveHelper.SetIsFrame(button, false);
+            }
+        }
+
+        private void CandidateButton(Button button, bool bCandidate)
+        {
+            if (bCandidate)
+            {
+                button.BorderThickness = new Thickness(6);
+                button.BorderBrush = Brushes.LimeGreen;
+            }
+            else
+            {
+                button.BorderThickness = new Thickness(1);
+                button.BorderBrush = Brushes.DarkGray;
+            }
+        }
+        private void PossibleButton(Button button, bool bPossible)
+        {
+            if (bPossible)
+            {
+                button.BorderThickness = new Thickness(6);
+                button.BorderBrush = Brushes.LightGreen;
             }
             else
             {
@@ -76,11 +141,14 @@ namespace PeakDesktop
             GetButtonGridPosition(sender, out row, out col);
             GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseMove [{row}/{col}]";
 
-            Button button = (Button)GetGridElement(FieldGrid, row - 1, col);
+            Button button = (Button)GetGridElement(FieldGrid, row , col);
+            if (button != null) CandidateButton(button, true);
+            
+            button = (Button)GetGridElement(FieldGrid, row - 1, col);
             if (button != null) FrameButton(button, true);
-            button = (Button)GetGridElement(FieldGrid, row +1, col);
+            button = (Button)GetGridElement(FieldGrid, row + 2, col);
             if (button != null) FrameButton(button, true);
-            button = (Button)GetGridElement(FieldGrid, row, col-1);
+            button = (Button)GetGridElement(FieldGrid, row, col - 2);
             if (button != null) FrameButton(button, true);
             button = (Button)GetGridElement(FieldGrid, row, col + 1);
             if (button != null) FrameButton(button, true);
@@ -92,11 +160,14 @@ namespace PeakDesktop
             GetButtonGridPosition(sender, out row, out col);
             GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseLeave [{row}/{col}]";
 
-            Button button = (Button)GetGridElement(FieldGrid, row - 1, col);
+            Button button = (Button)GetGridElement(FieldGrid, row, col);
+            if (button != null) CandidateButton(button, false);
+
+            button = (Button)GetGridElement(FieldGrid, row - 1, col);
             if (button != null) FrameButton(button, false);
-            button = (Button)GetGridElement(FieldGrid, row + 1, col);
+            button = (Button)GetGridElement(FieldGrid, row + 2, col);
             if (button != null) FrameButton(button, false);
-            button = (Button)GetGridElement(FieldGrid, row, col - 1);
+            button = (Button)GetGridElement(FieldGrid, row, col - 2);
             if (button != null) FrameButton(button, false);
             button = (Button)GetGridElement(FieldGrid, row, col + 1);
             if (button != null) FrameButton(button, false);
