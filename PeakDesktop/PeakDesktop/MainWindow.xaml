@@ -83,7 +83,8 @@
 
                             <Trigger Property="local:MoveHelper.IsFrame" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="Yellow"></Setter>
-                                <Setter TargetName="border" Property="Background"  Value="Pink"></Setter>
+                                <Setter TargetName="border" Property="Background"  Value="Red"></Setter>
+                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
                                 <Setter TargetName="border" Property="BorderThickness" Value="5"></Setter>
                             </Trigger>
 
@@ -144,14 +145,15 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.5" />
+                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
                                 <Setter Property="Foreground" Value="Gray" />
                                 <Setter Property="Background" Value="DarkBlue"/>
                             </Trigger>
 
                             <Trigger Property="local:MoveHelper.IsFrame" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="Yellow"></Setter>
-                                <Setter TargetName="border" Property="Background"  Value="LightBlue"></Setter>
+                                <Setter TargetName="border" Property="Background"  Value="Blue"></Setter>
+                                <Setter TargetName="border" Property="Opacity" Value="0.5" />
                                 <Setter TargetName="border" Property="BorderThickness" Value="5"></Setter>
                             </Trigger>
 
@@ -175,8 +177,8 @@
                         <Border Name="border" 
         				BorderThickness="1"
         				Padding="4,2" 
-        				BorderBrush="White" 
-        				CornerRadius="5" 
+        				BorderBrush="Black" 
+        				CornerRadius="0" 
         				Background="{TemplateBinding Background}">
                             <Grid >
                                 <ContentPresenter HorizontalAlignment="Center" 
@@ -192,7 +194,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="White" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
                                 <Setter Property="Foreground" Value="White" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
@@ -205,10 +207,10 @@
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsDefaulted" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="White" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
                             </Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="White" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="Black" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="border" Property="Opacity" Value="0.5" />
@@ -233,6 +235,7 @@
             <Setter Property="Background" Value="LightGray"/>
             <Setter Property="FontSize" Value="20" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
 
         </Style>
 

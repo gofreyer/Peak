@@ -27,12 +27,25 @@ namespace PeakDesktop
         }
 
         private GameBoard PeakBoard { get; set; }
+        private List<IMove> NextMoves { get; set; }
+        private List<Button> FrameButtons { get; set; } 
+        private Position From { get; set; }
+        private Position To { get; set; }
+        private Button FromButton { get; set; }
+        private Button ToButton { get; set; }
 
         private void Init()
         {
             PeakBoard = new GameBoard();
 
             DrawBoard();
+            int moveCount;
+            NextMoves = PeakBoard.MakeMoveList(out moveCount);
+            FrameButtons = new List<Button>();
+            From = null;
+            To = null;
+            FromButton = null;
+            ToButton = null;
         }
         private void DrawBoard()
         {
@@ -70,6 +83,32 @@ namespace PeakDesktop
                     }
                 }
             }
+            Player winner, theOther;
+            
+            int score, whitescore, blackscore, totalscore;
+            if (PeakBoard.GameOver(out winner, out score, out whitescore, out blackscore, out totalscore))
+            {
+                if (winner == Player.None)
+                {
+                    GameInformationLabel.Content = $"Tie game with the score of {score}!";
+                }
+                else
+                {
+                    theOther = PeakBoard.OtherPlayer(winner);
+                    int theOtherScore = (score == Math.Abs(whitescore)) ? Math.Abs(blackscore) : Math.Abs(whitescore);
+                    GameInformationLabel.Content = $"{GetPlayerColor(winner)} wins with the score of {score}\n{GetPlayerColor(theOther)} has a score of {theOtherScore}";
+                }
+            }
+            else
+            {
+                GameInformationLabel.Content = $"{GetPlayerColor(Player.White)}: {whitescore} / {GetPlayerColor(Player.Black)}: {blackscore}";
+            }
+        }
+        private string GetPlayerColor(Player player)
+        {
+            if (player == Player.White) return "RED";
+            if (player == Player.Black) return "BLUE";
+            return "WHITE";
         }
         private void GetButtonGridPosition(object sender, out int row, out int column)
         {
@@ -142,50 +181,104 @@ namespace PeakDesktop
         }
         private void Button_Click(object sender, EventArgs e)
         {
+            Button buttonClicked = (Button)sender;
+            int row, col;
+            GetButtonGridPosition(sender, out row, out col);
+            if (buttonClicked != null && From == null)
+            {
+                foreach (IMove _move in NextMoves)
+                {
+                    Move move = (Move)_move;
+                    if (move.From.X == col && move.From.Y == row)
+                    {
+                        From = new Position(row, col, PeakBoard);
+                        FromButton = buttonClicked;
+                        To = null;
+                        FrameButtons.Add(buttonClicked);
+                        FrameButton(buttonClicked, true);
+                        break;
+                    }
+                }
+            }
+            else if (buttonClicked != null && From != null && To == null)
+            {
+                foreach (IMove _move in NextMoves)
+                {
+                    Move move = (Move)_move;
+                    if (move.From.X == From.X && move.From.Y == From.Y && move.To.X == col && move.To.Y == row)
+                    {
+                        To = new Position(row, col, PeakBoard);
+                        ToButton = buttonClicked;
+                        Player currentPlayer = PeakBoard.NextPlayer;
+                        PeakBoard.Pass(currentPlayer, false);
+                        PeakBoard.DoMove(move);
+
+                        foreach (Button button in FrameButtons)
+                        {
+                            FrameButton(button, false);
+                        }
+                        FrameButtons.Clear();
+
+                        DrawBoard();
+                        int moveCount;
+                        NextMoves = PeakBoard.MakeMoveList(out moveCount);
+                        FrameButtons = new List<Button>();
+                        From = null;
+                        To = null;
+                        FromButton = null;
+                        ToButton = null;
+
+                        break;
+                    }
+                }
+            }
         }
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseEnter [{row}/{col}]";
-        }
+            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseEnter [{row}/{col}]";
+            
+            if (From == null)
+            {
+                FrameButtons = new List<Button>();
+
+                foreach (IMove _move in NextMoves)
+                {
+                    Move move = (Move)_move;
+                    if (move.From.X == col && move.From.Y == row)
+                    {
+                        Button button = (Button)GetGridElement(FieldGrid, move.To.Y, move.To.X);
+                        if (button != null)
+                        {
+                            FrameButtons.Add(button);
+                            FrameButton(button, true);
+                        }
+                    }
+                }
+            }
+         }
 
         private void Button_MouseMove(object sender, EventArgs e)
         {
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseMove [{row}/{col}]";
-
-            Button button = (Button)GetGridElement(FieldGrid, row , col);
-            if (button != null) CandidateButton(button, true);
-            
-            button = (Button)GetGridElement(FieldGrid, row - 1, col);
-            if (button != null) FrameButton(button, true);
-            button = (Button)GetGridElement(FieldGrid, row + 2, col);
-            if (button != null) FrameButton(button, true);
-            button = (Button)GetGridElement(FieldGrid, row, col - 2);
-            if (button != null) FrameButton(button, true);
-            button = (Button)GetGridElement(FieldGrid, row, col + 1);
-            if (button != null) FrameButton(button, true);
+            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseMove [{row}/{col}]";
         }
 
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseLeave [{row}/{col}]";
+            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseLeave [{row}/{col}]";
 
-            Button button = (Button)GetGridElement(FieldGrid, row, col);
-            if (button != null) CandidateButton(button, false);
-
-            button = (Button)GetGridElement(FieldGrid, row - 1, col);
-            if (button != null) FrameButton(button, false);
-            button = (Button)GetGridElement(FieldGrid, row + 2, col);
-            if (button != null) FrameButton(button, false);
-            button = (Button)GetGridElement(FieldGrid, row, col - 2);
-            if (button != null) FrameButton(button, false);
-            button = (Button)GetGridElement(FieldGrid, row, col + 1);
-            if (button != null) FrameButton(button, false);
+            if (From == null)
+            {
+                foreach (Button button in FrameButtons)
+                {
+                    FrameButton(button, false);
+                }
+            }
         }
     }
 }
