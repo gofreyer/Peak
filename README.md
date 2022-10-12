@@ -1,5 +1,5 @@
 # Peak
-My strategy game implementation of the boardgame "Peak" by Andreas Kuhnekath-Häbler  
+A strategy game implementation of the boardgame "Peak" by Andreas Kuhnekath-Häbler  
 
 https://www.spielewerkstatt.eu/de/startseite/187-peak.html
 
@@ -9,7 +9,7 @@ The game <strong>Peak</strong>
 
 The wooden board game "Peak" is a 2-person game by Andreas Kuhnekath-Häbler and published by Gerhards Spiel und Design.
 
-In my first C# implementation for the time being the game moves away from building towers to a more abstract way of adding up numbers. A simple random algorithm can be set as the computer opponent at the lowest game level. For higher game levels, the minimax algorithm (with different search tree depths) can serve as a computer opponent. The minimax algorithm is an algorithm for determining the optimal game strategy for finite two-person zero-sum games with perfect information.
+In my preliminary first C# WPF implementation for the time being the game moves away from building towers to a more abstract way of adding up numbers. A simple random algorithm can be set as the computer opponent at the lowest game level. For higher game levels, the minimax algorithm (with different search tree depths) can serve as a computer opponent. The minimax algorithm is an algorithm for determining the optimal game strategy for finite two-person zero-sum games with perfect information.
 https://en.wikipedia.org/wiki/Minimax
 
 <figure>
