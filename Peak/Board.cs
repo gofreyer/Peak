@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Peak
+namespace PeakDesktop
 {
     class Position
     {
@@ -229,6 +229,25 @@ namespace Peak
             Evaluation();
             NextPlayer = g.NextPlayer;
         }
+		public int GetAt(int row, int col)
+        {
+            if (row >= 0 && row < DIM && col >= 0 && col < DIM)
+            {
+                return Board[row, col];
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        public void SetAt(int row, int col, int value)
+        {
+            if (row >= 0 && row < DIM && col >= 0 && col < DIM)
+            {
+                Board[row, col] = value;
+            }
+        }
+
         public void Pass(Player player,bool setPass=true)
         {
             if (setPass)
@@ -256,12 +275,12 @@ namespace Peak
         {
             winner = Player.None;
             score = whitescore = blackscore = totalscore = 0;
+            Evaluation();
+            whitescore = Scoring[(int)Player.White];
+            blackscore = Scoring[(int)Player.Black];
+            totalscore = Scoring[(int)Player.None];
             if (Passing[(int)Player.White] > 1 || Passing[(int)Player.Black] > 1 || (Passing[(int)Player.White]==1 && Passing[(int)Player.Black] == 1))
             {
-                Evaluation();
-                whitescore = Scoring[(int)Player.White];
-                blackscore = Scoring[(int)Player.Black];
-                totalscore = Scoring[(int)Player.None];
                 if (Math.Abs(Scoring[(int)Player.White]) > Math.Abs(Scoring[(int)Player.Black]))
                 {
                     winner = Player.White;
@@ -348,11 +367,11 @@ namespace Peak
             {
                 for (int c = 0; c < DIM; c++)
                 {
-                    if (r % 2 == 1 && c == 0)
+                    if (r % 2 == 0 && c == 0)
                     {
                         NextPlayer = Player.White;
                     }
-                    else if (r % 2 == 0 && c == 0)
+                    else if (r % 2 == 1 && c == 0)
                     {
                         NextPlayer = Player.Black;
                     }
