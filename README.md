@@ -13,8 +13,8 @@ In my first C# implementation for the time being the game moves away from buildi
 https://en.wikipedia.org/wiki/Minimax
 
 <figure>
-    <img src="https://github.com/gofreyer/Peak/blob/main/PeakDesktop/PeakScreenShot.PNG" height="525" width="750">
     <figcaption><strong>Human player against the computer at minimax depth 5</strong></figcaption>
+    <img src="https://github.com/gofreyer/Peak/blob/main/PeakDesktop/PeakScreenShot.PNG" height="525" width="750">
 </figure>
 
 <p>In alternation of the colour on a 6x6 grid, exactly one origin field with the initial numerical value of 1 may be moved to exactly one other target field with a numerical value of any colour. The numerical value of the target field is then increased by 1 and it is given the colour of the original field, which itself then remains empty and colourless. As a compulsory condition, this move may only be made diagonally or orthogonally across intermediate squares (of any colour or even empty) with a total summed up value of 2. 
