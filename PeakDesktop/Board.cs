@@ -137,6 +137,19 @@ namespace PeakDesktop
             else if (From.X > To.X && From.Y < To.Y) return Direction.SW;
             else return Direction.INVALID;
         }
+        public List<Position> GetMovePositions()
+        {
+            List<Position> movePositions = null;
+            Direction dir = GetDirection();
+            if (dir == Direction.INVALID || dir == Direction.NONE)
+            {
+                return movePositions;
+            }
+
+            movePositions = MyBoard.GetMovePositions(From, To, dir);
+
+            return movePositions;
+        }
         public override string ToString()
         {
             string output = $"{From.ToString()} -> {To.ToString()} {MyBoard.Board[To.Y,To.X]}+1";
@@ -412,6 +425,98 @@ namespace PeakDesktop
                 LastMoves.Pop();
                 ChangePlayer();
             }
+        }
+        public List<Position> GetMovePositions(Position From, Position To, Move.Direction dir)
+        {
+            int row = From.Y;
+            int col = From.X;
+            List<Position> movePositions = null;
+            if (!From.IsValid())
+            {
+                return movePositions;
+            }
+            movePositions = new List<Position>();
+
+            movePositions.Add(From);
+            
+            switch (dir)
+            {
+                case Move.Direction.NONE:
+                case Move.Direction.INVALID:
+                    break;
+                case Move.Direction.N:
+                    col = From.X;
+                    for (row = From.Y - 1; row > To.Y; row--)
+                    {
+                        movePositions.Add(new Position(row,col,this));
+                    }
+                    break;
+                case Move.Direction.E:
+                    row = From.Y;
+                    for (col = From.X + 1; col < To.X; col++)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                    }
+                    break;
+                case Move.Direction.S:
+                    col = From.X;
+                    for (row = From.Y + 1; row < To.Y; row++)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                    }
+                    break;
+                case Move.Direction.W:
+                    row = From.Y;
+                    for (col = From.X - 1; col > To.X; col--)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                    }
+                    break;
+                case Move.Direction.NE:
+                    col = From.X + 1;
+                    row = From.Y - 1;
+                    while (col < To.X && row > To.Y)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                        col++;
+                        row--;
+                    }
+                    break;
+                case Move.Direction.NW:
+                    col = From.X - 1;
+                    row = From.Y - 1;
+                    while (col > To.X && row > To.Y)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                        col--;
+                        row--;
+                    }
+                    break;
+                case Move.Direction.SE:
+                    col = From.X + 1;
+                    row = From.Y + 1;
+                    while (col < To.X && row < To.Y)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                        col++;
+                        row++;
+                    }
+                    break;
+                case Move.Direction.SW:
+                    col = From.X - 1;
+                    row = From.Y + 1;
+                    while (col > To.X && row < To.Y)
+                    {
+                        movePositions.Add(new Position(row, col, this));
+                        col--;
+                        row++;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            movePositions.Add(To);
+            return movePositions;
         }
         public int GetIntermediateDistance(Position From, Position To, Move.Direction dir)
         {

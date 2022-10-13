@@ -196,7 +196,16 @@ namespace PeakDesktop
             FromButton = null;
             ToButton = null;
 
+            DoEvents();
+
             NextTurn();
+        }
+        private bool MouseIsAllowed()
+        {
+            if (!GameIsRunning) return false;
+            if (PeakBoard.NextPlayer == Player.White && RedPlayer != "Human Player") return false;
+            if (PeakBoard.NextPlayer == Player.Black && BluePlayer != "Human Player") return false;
+            return true;
         }
         public static void DoEvents()
         {
@@ -285,7 +294,7 @@ namespace PeakDesktop
 
         private void Button_Click(object sender, EventArgs e)
         {
-            if (GameIsRunning == false) return;
+            if (!MouseIsAllowed()) return;
 
             Button buttonClicked = (Button)sender;
             int row, col;
@@ -316,6 +325,9 @@ namespace PeakDesktop
                         To = new Position(row, col, PeakBoard);
                         ToButton = buttonClicked;
                         Player currentPlayer = PeakBoard.NextPlayer;
+
+                        ShowAnimateMove(move,500);
+                        
                         PeakBoard.Pass(currentPlayer, false);
                         PeakBoard.DoMove(move);
 
@@ -330,6 +342,57 @@ namespace PeakDesktop
                         break;
                     }
                 }
+            }
+        }
+        void ShowAnimateMove(IMove bestMove, int totaltime=1000)
+        {
+            foreach (Button frButton in FrameButtons)
+            {
+                FrameButton(frButton, false);
+            }
+            FrameButtons.Clear();
+
+            Move move = (Move)bestMove;
+
+            Style styleBlankButton = this.FindResource("BlankButton") as Style;
+            
+            List<Position> movePositions = move.GetMovePositions();
+
+            if (movePositions == null || movePositions.Count == 0)
+            {
+                return;
+            }
+
+            int count = 2*movePositions.Count - 1;
+            int intervall = (int)((float)totaltime / (float)count);
+            Button button = null;
+            Position pos = null;
+            for (int i = 0; i < movePositions.Count; i++)
+            {
+                pos = movePositions[i];
+                button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+                if (button != null)
+                {
+                    FrameButton(button,true);
+                    WaitNMilliSeconds(intervall);
+                }
+            }
+            for (int i = 0; i < movePositions.Count-1; i++)
+            {
+                pos = movePositions[i];
+                button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+                if (button != null)
+                {
+                    if (i==0) button.Style = styleBlankButton;
+                    FrameButton(button, false);
+                    WaitNMilliSeconds(intervall);
+                }
+            }
+            pos = movePositions[movePositions.Count - 1];
+            button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+            if (button != null)
+            {
+                FrameButton(button, false);
             }
         }
         void ShowMove(IMove bestMove, int show)
@@ -350,8 +413,8 @@ namespace PeakDesktop
         }
         private void Button_MouseEnter(object sender, EventArgs e)
         {
-            if (GameIsRunning == false) return;
-
+            if (!MouseIsAllowed()) return;
+            
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
             //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseEnter [{row}/{col}]";
@@ -378,7 +441,7 @@ namespace PeakDesktop
 
         private void Button_MouseMove(object sender, EventArgs e)
         {
-            if (GameIsRunning == false) return;
+            if (!MouseIsAllowed()) return;
 
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
@@ -387,7 +450,7 @@ namespace PeakDesktop
 
         private void Button_MouseLeave(object sender, EventArgs e)
         {
-            if (GameIsRunning == false) return;
+            if (!MouseIsAllowed()) return;
 
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
@@ -465,6 +528,7 @@ namespace PeakDesktop
             
             if (bestMove != null)
             {
+                /*
                 ShowMove(bestMove,1);
                 WaitNMilliSeconds(400);
                 ShowMove(bestMove,2);
@@ -472,6 +536,9 @@ namespace PeakDesktop
                 ShowMove(bestMove,3);
                 WaitNMilliSeconds(600);
                 ShowMove(bestMove, 4);
+                */
+                ShowAnimateMove(bestMove);
+
                 PeakBoard.Pass(currentPlayer, false);
                 PeakBoard.DoMove(bestMove);
                 DrawBoard();
