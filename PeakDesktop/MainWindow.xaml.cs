@@ -46,6 +46,7 @@ namespace PeakDesktop
         private List<Button> FrameButtons { get; set; } 
         private Position From { get; set; }
         private Position To { get; set; }
+        private Move HintMove { get; set; }
         private Button FromButton { get; set; }
         private Button ToButton { get; set; }
         private string RedPlayer { get; set; }
@@ -55,12 +56,32 @@ namespace PeakDesktop
 
         private void HintCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = true;
+            e.CanExecute = MouseIsAllowed();
         }
 
         private void HintCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MessageBox.Show("The Hint command was invoked");
+            int maxDepth = 5;
+            int depth = 1;
+            if (NextMovesCount > 0)
+            {
+                depth = (int)Math.Round((1.0 / (float)NextMovesCount) * 80.0);
+                if (depth < 1) depth = 1;
+                if (depth > maxDepth) depth = maxDepth;
+            }
+            IMove bestMove;
+            bestMove = null;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+            });
+            Algorithmn.MinMaxMove(PeakBoard, depth, out bestMove);
+            HintMove = (Move)bestMove;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Mouse.OverrideCursor = null;
+            });
+            if (HintMove != null) DrawHint();
         }
         
         private void Init()
@@ -238,6 +259,7 @@ namespace PeakDesktop
             To = null;
             FromButton = null;
             ToButton = null;
+            HintMove = null;
 
             DoEvents();
 
@@ -299,6 +321,51 @@ namespace PeakDesktop
                 MoveHelper.SetIsFrame(button, false);
             }
         }
+        private void RemoveHint()
+        {
+            if (HintMove != null)
+            {
+                Button button = (Button)GetGridElement(FieldGrid, HintMove.From.Y, HintMove.From.X);
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                    FrameButton(button, false);
+                }
+                button = (Button)GetGridElement(FieldGrid, HintMove.To.Y, HintMove.To.X);
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                    FrameButton(button, false);
+                }
+                HintMove = null;
+                DrawBoard();
+            }
+        }
+        private void DrawHint()
+        {
+            Move hintBkp = HintMove;
+            DrawBoard();
+            HintMove = hintBkp;
+            if (HintMove != null)
+            {
+                Button button = (Button)GetGridElement(FieldGrid, HintMove.From.Y, HintMove.From.X);
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                    button.Content = "0";
+                    FrameButton(button, true);
+                }
+                button = (Button)GetGridElement(FieldGrid, HintMove.To.Y, HintMove.To.X);
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                    button.Content = $"{Math.Abs(PeakBoard.Board[HintMove.To.Y, HintMove.To.X])}+1";
+                    FrameButton(button, true);
+                }
+                WaitNMilliSeconds(500);
+            }
+        }
+
         private void Button_Click(object sender, EventArgs e)
         {
             if (!MouseIsAllowed()) return;
@@ -461,7 +528,9 @@ namespace PeakDesktop
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             if (!MouseIsAllowed()) return;
-            
+
+            RemoveHint();
+
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
                         
@@ -489,6 +558,8 @@ namespace PeakDesktop
         {
             if (!MouseIsAllowed()) return;
 
+            //RemoveHint();
+
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
         }
@@ -496,6 +567,8 @@ namespace PeakDesktop
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             if (!MouseIsAllowed()) return;
+
+            RemoveHint();
 
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
