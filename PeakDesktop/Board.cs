@@ -187,6 +187,7 @@ namespace PeakDesktop
         public int[] Passing { get; set; }
         public Stack<IMove> LastMoves { get; set; }
         public Player NextPlayer { get; set; }
+        public bool TargetWithValue { get; set; }
         public int GetDim()
         {
             return DIM;
@@ -374,6 +375,7 @@ namespace PeakDesktop
 
         public void Init()
         {
+            TargetWithValue = true;
             NextPlayer = Player.White;
             int chip = GetInitValue(NextPlayer);
             for (int r = 0; r < DIM; r++)
@@ -528,7 +530,7 @@ namespace PeakDesktop
                 return 0;
             }
                                     
-            if (Math.Abs(Board[row,col]) != 1 || Math.Abs(Board[To.Y, To.X]) == 0)
+            if (Math.Abs(Board[row,col]) != 1 || ( Math.Abs(Board[To.Y, To.X]) == 0  &&  TargetWithValue  ))
             {
                 return 0;
             }

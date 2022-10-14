@@ -60,7 +60,7 @@ namespace PeakDesktop
             GoButton.IsEnabled = true;
             PassButton.IsEnabled = false;
 
-            GameInformationLabel.Content = $"RED is {RedPlayer} and BLUE is {BluePlayer}";
+            GameInformationLabel.Content = $"RED is {RedPlayer}     BLUE is {BluePlayer}";
         }
         private void DrawBoard()
         {
@@ -122,26 +122,25 @@ namespace PeakDesktop
             }
             else
             {
-                //GameInformationLabel.Content = $"{GetPlayerColor(Player.White)}: {whitescore} / {GetPlayerColor(Player.Black)}: {blackscore}";
                 GameInformationLabel.Content = "";
             }
             
-            ButtonScoreRed.Content = (whitescore > 0) ? $"{whitescore}":"";
-            ButtonScoreBlue.Content = (blackscore > 0) ? $"{blackscore}" : "";
+            ButtonScoreRed.Content = $"{whitescore}";
+            ButtonScoreBlue.Content = $"{blackscore}";
 
             if (whitescore > blackscore)
             {
-                ButtonScoreRed.Height = 160;
-                ButtonScoreRed.Width = 160;
-                ButtonScoreBlue.Height = 80;
-                ButtonScoreBlue.Width = 80;
+                ButtonScoreRed.Height = 140;
+                ButtonScoreRed.Width = 140;
+                ButtonScoreBlue.Height = 100;
+                ButtonScoreBlue.Width = 100;
             }
             else if (blackscore > whitescore)
             {
-                ButtonScoreRed.Height = 80;
-                ButtonScoreRed.Width = 80;
-                ButtonScoreBlue.Height = 160;
-                ButtonScoreBlue.Width = 160;
+                ButtonScoreRed.Height = 100;
+                ButtonScoreRed.Width = 100;
+                ButtonScoreBlue.Height = 140;
+                ButtonScoreBlue.Width = 140;
             }
             else
             {
@@ -180,11 +179,30 @@ namespace PeakDesktop
                     MoveHelper.SetIsTurn(ButtonScoreRed, false);
                     MoveHelper.SetIsTurn(ButtonScoreBlue, true);
                 }
+
+                ButtonWinnerRed.Visibility = Visibility.Hidden;
+                ButtonWinnerBlue.Visibility = Visibility.Hidden;
             }
             else
             {
                 MoveHelper.SetIsTurn(ButtonScoreRed, false);
                 MoveHelper.SetIsTurn(ButtonScoreBlue, false);
+
+                if (winner == Player.None)
+                {
+                    ButtonWinnerRed.Visibility = Visibility.Visible;
+                    ButtonWinnerBlue.Visibility = Visibility.Visible;
+                }
+                else if (winner == Player.White)
+                {
+                    ButtonWinnerRed.Visibility = Visibility.Visible;
+                    ButtonWinnerBlue.Visibility = Visibility.Hidden;
+                }
+                else if (winner == Player.Black)
+                {
+                    ButtonWinnerRed.Visibility = Visibility.Hidden;
+                    ButtonWinnerBlue.Visibility = Visibility.Visible;
+                }
             }
 
             int movescount = 0;
@@ -249,49 +267,13 @@ namespace PeakDesktop
         {
             if (bFrame)
             {
-                /*
-                button.BorderThickness = new Thickness(6);
-                button.BorderBrush = Brushes.Yellow;
-                */
                 MoveHelper.SetIsFrame(button, true);
             }
             else
             {
-                /*
-                button.BorderThickness = new Thickness(1);
-                button.BorderBrush = Brushes.DarkGray;
-                */
                 MoveHelper.SetIsFrame(button, false);
             }
         }
-
-        private void CandidateButton(Button button, bool bCandidate)
-        {
-            if (bCandidate)
-            {
-                button.BorderThickness = new Thickness(6);
-                button.BorderBrush = Brushes.LimeGreen;
-            }
-            else
-            {
-                button.BorderThickness = new Thickness(1);
-                button.BorderBrush = Brushes.DarkGray;
-            }
-        }
-        private void PossibleButton(Button button, bool bPossible)
-        {
-            if (bPossible)
-            {
-                button.BorderThickness = new Thickness(6);
-                button.BorderBrush = Brushes.LightGreen;
-            }
-            else
-            {
-                button.BorderThickness = new Thickness(1);
-                button.BorderBrush = Brushes.DarkGray;
-            }
-        }
-
         private void Button_Click(object sender, EventArgs e)
         {
             if (!MouseIsAllowed()) return;
@@ -311,12 +293,26 @@ namespace PeakDesktop
                         To = null;
                         FrameButtons.Add(buttonClicked);
                         FrameButton(buttonClicked, true);
+                        buttonClicked.Content = "1";
                         break;
                     }
                 }
             }
             else if (buttonClicked != null && From != null && To == null)
             {
+                if (From.X == col && From.Y == row)
+                {
+                    // Reset From-Button
+                    From = null;
+                    foreach (Button button in FrameButtons)
+                    {
+                        FrameButton(button, false);
+                    }
+                    FrameButtons.Clear();
+                    DrawBoard();
+                    return;
+                }
+                
                 foreach (IMove _move in NextMoves)
                 {
                     Move move = (Move)_move;
@@ -365,29 +361,42 @@ namespace PeakDesktop
 
             int count = 2*movePositions.Count - 1;
             int intervall = (int)((float)totaltime / (float)count);
+            
             Button button = null;
             Position pos = null;
-            for (int i = 0; i < movePositions.Count; i++)
+
+            pos = movePositions[0];
+            button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+            if (button != null)
+            {
+                button.IsEnabled = false;
+                button.Content = "0";
+            }
+            pos = movePositions[movePositions.Count - 1];
+            button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+            if (button != null)
+            {
+                button.IsEnabled = false;
+                button.Content = $"{Math.Abs(PeakBoard.Board[pos.Y, pos.X])}+1";
+            }
+            
+            int i;
+            for (i = 0; i < movePositions.Count; i++)
             {
                 pos = movePositions[i];
                 button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
                 if (button != null)
                 {
                     FrameButton(button,true);
-                    if (i == 0 || i == movePositions.Count - 1) button.IsEnabled = false;
-                    if (i == 0) button.Content = "+";
-                    if (i == movePositions.Count - 1) button.Content = $"{Math.Abs(PeakBoard.Board[pos.Y, pos.X])}+1";
                     WaitNMilliSeconds(intervall);
                 }
             }
-            for (int i = 0; i < movePositions.Count-1; i++)
+            for (i = 0; i < movePositions.Count-1; i++)
             {
                 pos = movePositions[i];
                 button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
                 if (button != null)
                 {
-                    //if (i==0) button.Style = styleBlankButton;
-                    //if (i == 0) button.IsEnabled = false;
                     FrameButton(button, false);
                     WaitNMilliSeconds(intervall);
                 }
@@ -430,8 +439,7 @@ namespace PeakDesktop
             
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseEnter [{row}/{col}]";
-            
+                        
             if (From == null)
             {
                 FrameButtons = new List<Button>();
@@ -458,7 +466,6 @@ namespace PeakDesktop
 
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseMove [{row}/{col}]";
         }
 
         private void Button_MouseLeave(object sender, EventArgs e)
@@ -467,7 +474,6 @@ namespace PeakDesktop
 
             int row, col;
             GetButtonGridPosition(sender, out row, out col);
-            //GameInformationLabel.Content = $"{sender.GetType().ToString()}: MouseLeave [{row}/{col}]";
 
             if (From == null)
             {
@@ -483,13 +489,17 @@ namespace PeakDesktop
 
             Player currentPlayer = PeakBoard.NextPlayer;
 
-            GameInformationLabel.Content = $"RED is {RedPlayer} and BLUE is {BluePlayer}";
+            GameInformationLabel.Content = $"RED is {RedPlayer}     BLUE is {BluePlayer}";
 
             if (currentPlayer == Player.White && RedPlayer == "Human Player") return;
             if (currentPlayer == Player.Black && BluePlayer == "Human Player") return;
 
             IMove bestMove;
             bestMove = null;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+            });
             if (currentPlayer == Player.White)
             {
                 if (RedPlayer == "Random")
@@ -538,18 +548,13 @@ namespace PeakDesktop
                     Algorithmn.MinMaxMove(PeakBoard, depth, out bestMove);
                 }
             }
-            
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Mouse.OverrideCursor = null;
+            });
+
             if (bestMove != null)
             {
-                /*
-                ShowMove(bestMove,1);
-                WaitNMilliSeconds(400);
-                ShowMove(bestMove,2);
-                WaitNMilliSeconds(500);
-                ShowMove(bestMove,3);
-                WaitNMilliSeconds(600);
-                ShowMove(bestMove, 4);
-                */
                 ShowAnimateMove(bestMove);
 
                 PeakBoard.Pass(currentPlayer, false);
@@ -599,7 +604,7 @@ namespace PeakDesktop
             {
                 RedPlayer = cbi.Content.ToString();
             }
-            GameInformationLabel.Content = $"RED is {RedPlayer} and BLUE is {BluePlayer}";
+            GameInformationLabel.Content = $"RED is {RedPlayer}     BLUE is {BluePlayer}";
         }
         private void BluePlayer_SelectionChanged(object sender, SelectionChangedEventArgs args)
         {
@@ -609,7 +614,7 @@ namespace PeakDesktop
             {
                 BluePlayer = cbi.Content.ToString();
             }
-            GameInformationLabel.Content = $"RED is {RedPlayer} and BLUE is {BluePlayer}";
+            GameInformationLabel.Content = $"RED is {RedPlayer}     BLUE is {BluePlayer}";
         }
     }
 }

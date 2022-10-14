@@ -28,8 +28,9 @@
         <Style x:Key="RedButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontSize" Value="45"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
             <Setter Property="Background" Value="#cc181e" />
             <Setter Property="Foreground" Value="DarkRed" />
@@ -104,8 +105,9 @@
         <Style x:Key="BlueButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontSize" Value="45"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
             <Setter Property="Background" Value="#2793e8" />
             <Setter Property="Foreground" Value="DarkBlue" />
@@ -180,8 +182,9 @@
         <Style x:Key="BlankButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Margin" Value="0"/>
-            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="FontSize" Value="45"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
             <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
             <Setter Property="Background" Value="White" />
             <Setter Property="Foreground" Value="White" />
@@ -227,11 +230,12 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="LightGray" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.5" />
-                                <Setter Property="Foreground" Value="White" />
-                                <Setter Property="Background" Value="White"/>
+                                <Setter TargetName="border" Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Background" Value="DarkGray"/>
+                                <Setter Property="FontSize" Value="25"/>
                             </Trigger>
-
+                            
                             <Trigger Property="local:MoveHelper.IsFrame" Value="True">
                                 <Setter TargetName="border" Property="BorderBrush" Value="Yellow"></Setter>
                                 <Setter TargetName="border" Property="Background"  Value="LightGray"></Setter>
@@ -250,22 +254,50 @@
             <Setter Property="FontSize" Value="20" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Verdana"/>
 
         </Style>
 
-        <Style TargetType="Button" x:Key="CellStyle">
-
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="DarkGray" />
+        <Style TargetType="Button" x:Key="WinnerButton">
+            <Setter Property="Background" Value="Gold"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="BorderBrush" Value="Silver" />
             <Setter Property="FontSize" Value="65" />
-
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+        				BorderThickness="3"
+        				Padding="4,2" 
+        				BorderBrush="Silver" 
+        				CornerRadius="15" 
+        				Background="{TemplateBinding Background}">
+                            <Grid >
+                                <ContentPresenter HorizontalAlignment="Center" 
+        	                           VerticalAlignment="Center" Name="contentShadow" 
+        					Style="{StaticResource ShadowStyle}">
+                                    <ContentPresenter.RenderTransform>
+                                        <TranslateTransform X="1.0" Y="1.0" />
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" Name="content"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Background" Value="Gray"/>
-            <Setter Property="FontSize" Value="20" />
-            <Setter Property="Margin" Value="7"/>
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="2,4,2,4"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -283,13 +315,15 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Name="GamePanelRed" Background="White">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
                     <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
+                    <RowDefinition Height="100" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Name="ButtonScoreRed" Grid.Column="0" Grid.Row="0" Style="{StaticResource RedButton}" local:MoveHelper.IsTurn="{Binding IsTurn}" Width="150" Height="150"/>
-                <Button Name="ButtonPassRed" Grid.Column="0" Grid.Row="1" Style="{StaticResource RedButton}" Width="20" Height="20" Visibility="Hidden" VerticalAlignment="Top" Margin="10"/>
-                <ComboBox Name="ComboBoxRedPlayer" Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10" SelectionChanged="RedPlayer_SelectionChanged">
+                <Button Name="ButtonWinnerRed" Grid.Column="0" Grid.Row="0" Style="{StaticResource WinnerButton}" Width="50" Height="50" Visibility="Hidden"  Margin="10"/>
+                <Button Name="ButtonScoreRed" Grid.Column="0" Grid.Row="1" Style="{StaticResource RedButton}" local:MoveHelper.IsTurn="{Binding IsTurn}" Width="150" Height="150"/>
+                <Button Name="ButtonPassRed" Grid.Column="0" Grid.Row="2" Style="{StaticResource RedButton}" Width="20" Height="20" Visibility="Hidden" VerticalAlignment="Top" Margin="10"/>
+                <ComboBox Name="ComboBoxRedPlayer" Grid.Column="0" Grid.Row="3" VerticalAlignment="Bottom" Margin="10,10" SelectionChanged="RedPlayer_SelectionChanged">
                     <ComboBoxItem IsSelected="True">Human Player</ComboBoxItem>
                     <ComboBoxItem>Random</ComboBoxItem>
                     <ComboBoxItem>MiniMax 1</ComboBoxItem>
@@ -360,13 +394,15 @@
             </Grid>
             <Grid Grid.Row="0" Grid.Column="2" Name="GamePanelBlue" Background="White">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="100" />
                     <RowDefinition Height="200" />
-                    <RowDefinition Height="200" />
+                    <RowDefinition Height="100" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Name="ButtonScoreBlue" Grid.Column="0" Grid.Row="0" Style="{StaticResource BlueButton}" local:MoveHelper.IsTurn="{Binding IsTurn}" Width="150" Height="150" />
-                <Button Name="ButtonPassBlue" Grid.Column="0" Grid.Row="1" Style="{StaticResource BlueButton}" Width="20" Height="20" Visibility="Hidden" VerticalAlignment="Top" Margin="10"/>
-                <ComboBox Name="ComboBoxBluePlayer" Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" Margin="10,10" SelectionChanged="BluePlayer_SelectionChanged">
+                <Button Name="ButtonWinnerBlue" Grid.Column="0" Grid.Row="0" Style="{StaticResource WinnerButton}" Width="50" Height="50" Visibility="Hidden" Margin="10"/>
+                <Button Name="ButtonScoreBlue" Grid.Column="0" Grid.Row="1" Style="{StaticResource BlueButton}" local:MoveHelper.IsTurn="{Binding IsTurn}" Width="150" Height="150" />
+                <Button Name="ButtonPassBlue" Grid.Column="0" Grid.Row="2" Style="{StaticResource BlueButton}" Width="20" Height="20" Visibility="Hidden" VerticalAlignment="Top" Margin="10"/>
+                <ComboBox Name="ComboBoxBluePlayer" Grid.Column="0" Grid.Row="3" VerticalAlignment="Bottom" Margin="10,10" SelectionChanged="BluePlayer_SelectionChanged">
                     <ComboBoxItem>Human Player</ComboBoxItem>
                     <ComboBoxItem>Random</ComboBoxItem>
                     <ComboBoxItem>MiniMax 1</ComboBoxItem>
@@ -383,9 +419,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <Button Click="GoButton_Click" Name="GoButton" Grid.Row="0" Grid.Column="0" Style="{StaticResource ButtonStyle}" >Go</Button>
-            <Button Click="StartButton_Click" Name="StartButton" Grid.Row="0" Grid.Column="1" Style="{StaticResource ButtonStyle}" >New</Button>
-            <Button Click="PassButton_Click" Name="PassButton" Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonStyle}" >Pass</Button>
+            <Button Click="GoButton_Click" Name="GoButton" Grid.Row="0" Grid.Column="0" Style="{StaticResource ButtonStyle}">Go</Button>
+            <Button Click="StartButton_Click" Name="StartButton" Grid.Row="0" Grid.Column="1" Style="{StaticResource ButtonStyle}">New</Button>
+            <Button Click="PassButton_Click" Name="PassButton" Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonStyle}">Pass</Button>
         </Grid>
     </Grid>
 </Window>
