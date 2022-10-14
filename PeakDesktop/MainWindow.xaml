@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:PeakDesktop"
         mc:Ignorable="d"
         Title="Peak Desktop" ResizeMode="NoResize" Height="700" Width="1000" Icon="Peak.ico">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:CustomCommands.Hint" Executed="HintCommand_Executed" CanExecute="HintCommand_CanExecute" />
+    </Window.CommandBindings>
     <Window.Resources>
 
         <Style x:Key="MyFocusVisual">
@@ -351,6 +354,15 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="New" />
+                        <MenuItem Header="Pass" />
+                        <Separator />
+                        <MenuItem Header="Hint" Command="local:CustomCommands.Hint"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
                 <Button Click="Button_Click" Name="Button0_0" Grid.Column="0" Grid.Row="0" Style="{StaticResource RedButton}" local:MoveHelper.IsFrame="{Binding IsFrame}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
                 <Button Click="Button_Click" Name="Button0_1" Grid.Column="0" Grid.Row="1" Style="{StaticResource RedButton}" local:MoveHelper.IsFrame="{Binding IsFrame}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>
                 <Button Click="Button_Click" Name="Button0_2" Grid.Column="0" Grid.Row="2" Style="{StaticResource RedButton}" local:MoveHelper.IsFrame="{Binding IsFrame}" MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" MouseMove="Button_MouseMove"/>

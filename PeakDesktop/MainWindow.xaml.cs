@@ -18,6 +18,21 @@ namespace PeakDesktop
     /// <summary>
     /// Interaktionslogik für MainWindow.xaml
     /// </summary>
+    public static class CustomCommands
+    {
+        public static readonly RoutedUICommand Hint = new RoutedUICommand
+            (
+                "Hint",
+                "Hint",
+                typeof(CustomCommands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.F4, ModifierKeys.Alt)
+                }
+            );
+
+        //Define more commands here, just like the one above
+    }
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -38,6 +53,16 @@ namespace PeakDesktop
         private bool GameIsRunning { get; set; }
         private int NextMovesCount { get; set; }
 
+        private void HintCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void HintCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("The Hint command was invoked");
+        }
+        
         private void Init()
         {
             PeakBoard = new GameBoard();
