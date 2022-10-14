@@ -374,6 +374,9 @@ namespace PeakDesktop
                 if (button != null)
                 {
                     FrameButton(button,true);
+                    if (i == 0 || i == movePositions.Count - 1) button.IsEnabled = false;
+                    if (i == 0) button.Content = "+";
+                    if (i == movePositions.Count - 1) button.Content = $"{Math.Abs(PeakBoard.Board[pos.Y, pos.X])}+1";
                     WaitNMilliSeconds(intervall);
                 }
             }
@@ -383,16 +386,26 @@ namespace PeakDesktop
                 button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
                 if (button != null)
                 {
-                    if (i==0) button.Style = styleBlankButton;
+                    //if (i==0) button.Style = styleBlankButton;
+                    //if (i == 0) button.IsEnabled = false;
                     FrameButton(button, false);
                     WaitNMilliSeconds(intervall);
                 }
+            }
+            pos = movePositions[0];
+            button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
+            if (button != null)
+            {
+                WaitNMilliSeconds(200);
+                button.IsEnabled = true;
             }
             pos = movePositions[movePositions.Count - 1];
             button = (Button)GetGridElement(FieldGrid, pos.Y, pos.X);
             if (button != null)
             {
                 FrameButton(button, false);
+                WaitNMilliSeconds(200);
+                button.IsEnabled = true;
             }
         }
         void ShowMove(IMove bestMove, int show)

@@ -76,9 +76,10 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.5" />
-                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter TargetName="border" Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="Black" />
                                 <Setter Property="Background" Value="DarkRed"/>
+                                <Setter Property="FontSize" Value="25"/>
                             </Trigger>
 
                             <Trigger Property="local:MoveHelper.IsFrame" Value="True">
@@ -151,9 +152,10 @@
                                 <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
-                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter TargetName="border" Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="Black" />
                                 <Setter Property="Background" Value="DarkBlue"/>
+                                <Setter Property="FontSize" Value="25"/>
                             </Trigger>
 
                             <Trigger Property="local:MoveHelper.IsFrame" Value="True">
@@ -263,7 +265,7 @@
         <Style TargetType="Button" x:Key="ButtonStyle">
             <Setter Property="Background" Value="Gray"/>
             <Setter Property="FontSize" Value="20" />
-            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Margin" Value="7"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -381,9 +383,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
-            <Button Click="GoButton_Click" Name="GoButton" Grid.Row="0" Grid.Column="0" Style="{StaticResource ButtonStyle}">Go</Button>
-            <Button Click="StartButton_Click" Name="StartButton" Grid.Row="0" Grid.Column="1" Style="{StaticResource ButtonStyle}">New</Button>
-            <Button Click="PassButton_Click" Name="PassButton" Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonStyle}">Pass</Button>
+            <Button Click="GoButton_Click" Name="GoButton" Grid.Row="0" Grid.Column="0" Style="{StaticResource ButtonStyle}" >Go</Button>
+            <Button Click="StartButton_Click" Name="StartButton" Grid.Row="0" Grid.Column="1" Style="{StaticResource ButtonStyle}" >New</Button>
+            <Button Click="PassButton_Click" Name="PassButton" Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonStyle}" >Pass</Button>
         </Grid>
     </Grid>
 </Window>
