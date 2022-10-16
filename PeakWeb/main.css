@@ -27,6 +27,11 @@ body {
   color: #fff;
   border-radius: 10px;
   border: 2px solid #171717;
+  display: flex;
+  /*this centers the text horizontally*/
+  justify-content: center;
+  /*this centers the text vertically*/
+  align-items: center;
 }
 
 .itemblue {
@@ -36,6 +41,11 @@ body {
   color: #fff;
   border-radius: 10px;
   border: 2px solid #171717;
+   display: flex;
+  /*this centers the text horizontally*/
+  justify-content: center;
+  /*this centers the text vertically*/
+  align-items: center;
 }
 
 .itemred {
@@ -45,6 +55,11 @@ body {
   color: #fff;
   border-radius: 10px;
   border: 2px solid #171717;
+   display: flex;
+  /*this centers the text horizontally*/
+  justify-content: center;
+  /*this centers the text vertically*/
+  align-items: center;
 }
 
 .itemwhite {
