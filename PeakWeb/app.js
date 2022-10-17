@@ -152,7 +152,7 @@ class Position {
     this._y = y;
   }
   static newPosition(pos) {
-    var newPos = new Position(pos.Y(), pos.X(), pos.MyBoard());
+    var newPos = new Position(pos.Y, pos.X, pos.MyBoard);
     return newPos;
   }
   get MyBoard() {
@@ -165,7 +165,7 @@ class Position {
     return this._x;
   }
   set X(value) {
-    if (value < this.MyBoard().GetDim()) {
+    if (value < this.MyBoard.GetDim()) {
       this._x = value;
     } else {
       this._x = -1;
@@ -175,7 +175,7 @@ class Position {
     return this._y;
   }
   set Y(value) {
-    if (value < this.MyBoard().GetDim()) {
+    if (value < this.MyBoard.GetDim()) {
       this._y = value;
     } else {
       this._y = -1;
@@ -183,14 +183,14 @@ class Position {
   }
   IsValid() {
     return (
-      this.X() >= 0 &&
-      this.X() < this.MyBoard().GetDim() &&
-      this.Y() >= 0 &&
-      this.Y() < this.MyBoard().GetDim()
+      this.X >= 0 &&
+      this.X < this.MyBoard.GetDim() &&
+      this.Y >= 0 &&
+      this.Y < this.MyBoard.GetDim()
     );
   }
   IsEqual(pos) {
-    return pos.X() == this.X() && pos.Y() == this.Y();
+    return pos.X == this.X && pos.Y == this.Y;
   }
 }
 
@@ -216,7 +216,7 @@ class Move {
     this._applied = false;
   }
   static newMove(move) {
-    var newMove = new Move(move.From(), move.To(), move.MyBoard());
+    var newMove = new Move(move.From, move.To, move.MyBoard);
     newMove.PreValFrom = move.PreValFrom();
     newMove.PreValTo = move.PreValTo();
     newMove.PostValFrom = move.PostValFrom();
@@ -279,9 +279,9 @@ class Move {
     if (dir == Direction.INVALID || dir == Direction.NONE) {
       return false;
     }
-    let intermediateDistance = this.MyBoard().GetIntermediateDistance(
-      this.From(),
-      this.To(),
+    let intermediateDistance = this.MyBoard.GetIntermediateDistance(
+      this.From,
+      this.To,
       dir
     );
     return intermediateDistance == 2;
@@ -289,46 +289,30 @@ class Move {
 
   GetDirection() {
     if (
-      !this.From().IsValid() ||
-      !this.To().IsValid() ||
-      (this.From.X() != this.To.X() &&
-        this.From.Y() != this.To.Y() &&
-        Math.Abs(this.From.X() - this.To.X()) !=
-          Math.Abs(this.From.Y() - this.To.Y()))
+      !this.From.IsValid() ||
+      !this.To.IsValid() ||
+      (this.From.X != this.To.X &&
+        this.From.Y != this.To.Y &&
+        Math.abs(this.From.X - this.To.X) != Math.abs(this.From.Y - this.To.Y))
     )
       return Direction.INVALID;
-    else if (
-      this.From().X() == this.To().X() &&
-      this.From().Y() == this.To().Y()
-    )
+    else if (this.From.X == this.To.X && this.From.Y == this.To.Y)
       return Direction.NONE;
-    else if (
-      this.From().Y() == this.To().Y() &&
-      this.From().X() < this.To().X()
-    )
+    else if (this.From.Y == this.To.Y && this.From.X < this.To.X)
       return Direction.E;
-    else if (
-      this.From().Y() == this.To().Y() &&
-      this.From().X() > this.To().X()
-    )
+    else if (this.From.Y == this.To.Y && this.From.X > this.To.X)
       return Direction.W;
-    else if (
-      this.From().X() == this.To().X() &&
-      this.From().Y() < this.To().Y()
-    )
+    else if (this.From.X == this.To.X && this.From.Y < this.To.Y)
       return Direction.S;
-    else if (
-      this.From().X() == this.To().X() &&
-      this.From().Y() > this.To().Y()
-    )
+    else if (this.From.X == this.To.X && this.From.Y > this.To.Y)
       return Direction.N;
-    else if (this.From().X() < this.To().X() && this.From().Y() > this.To().Y())
+    else if (this.From.X < this.To.X && this.From.Y > this.To.Y)
       return Direction.NE;
-    else if (this.From().X() > this.To().X() && this.From().Y() > this.To().Y())
+    else if (this.From.X > this.To.X && this.From.Y > this.To.Y)
       return Direction.NW;
-    else if (this.From().X() < this.To().X() && this.From().Y() < this.To().Y())
+    else if (this.From.X < this.To.X && this.From.Y < this.To.Y)
       return Direction.SE;
-    else if (this.From().X() > this.To().X() && this.From().Y() < this.To().Y())
+    else if (this.From.X > this.To.X && this.From.Y < this.To.Y)
       return Direction.SW;
     else return Direction.INVALID;
   }
@@ -339,41 +323,41 @@ class Move {
     if (dir == Direction.INVALID || dir == Direction.NONE) {
       return movePositions;
     }
-    movePositions = this.MyBoard().GetMovePositions(
-      this.From(),
-      this.To(),
-      dir
-    );
+    movePositions = this.MyBoard.GetMovePositions(this.From, this.To, dir);
 
     return movePositions;
   }
 
   IsEqual(move) {
-    return move.From().IsEqual(this.From()) && move.To().IsEqual(this.To());
+    return move.From.IsEqual(this.From) && move.To.IsEqual(this.To);
   }
   PreMove() {
-    this.PreValueFrom =
-      this.MyBoard().Board[(this.From().Y(), this.From().X())];
-    this.PreValueTo = this.MyBoard.Board[(this.To().Y(), this.To().X())];
+    this.PreValueFrom = this.MyBoard.Board[(this.From.Y, this.From.X)];
+    this.PreValueTo = this.MyBoard.Board[(this.To.Y, this.To.X)];
   }
   PostMove() {
-    this.PostValueFrom =
-      this.MyBoard().Board[(this.From().Y(), this.From().X())];
-    this.PostValueTo = this.MyBoard.Board[(this.To().Y(), this.To().X())];
+    this.PostValueFrom = this.MyBoard.Board[(this.From.Y, this.From.X)];
+    this.PostValueTo = this.MyBoard.Board[(this.To.Y, this.To.X)];
   }
   Undo() {
-    this.MyBoard().Board[(this.From().Y(), this.From().X())] =
-      this.PreValueFrom();
-    this.MyBoard().Board[(this.To().Y(), this.To().X())] = this.PreValueTo();
+    this.MyBoard.Board[(this.From.Y, this.From.X)] = this.PreValueFrom();
+    this.MyBoard.Board[(this.To.Y, this.To.X)] = this.PreValueTo();
   }
 }
 
 // Gameboard
 class GameBoard {
-  _board;
-  _scoring = [];
-  _passing = [];
-  _lastmoves = [];
+  _board = new Array(
+    new Array(0, 0, 0, 0, 0, 0),
+    new Array(0, 0, 0, 0, 0, 0),
+    new Array(0, 0, 0, 0, 0, 0),
+    new Array(0, 0, 0, 0, 0, 0),
+    new Array(0, 0, 0, 0, 0, 0),
+    new Array(0, 0, 0, 0, 0, 0)
+  );
+  _scoring = new Array(0, 0, 0);
+  _passing = new Array(0, 0);
+  _lastmoves = new Array();
   _nextplayer = Player.White;
 
   GetDim() {
@@ -386,26 +370,24 @@ class GameBoard {
     } else {
       this._nextplayer = nextPlayer;
     }
-    _board = Array.from(Array(DIM), () => new Array(DIM));
-    _lastMoves = new Array();
-    _scoring = [0, 0, 0];
-    _passing = [0, 0];
-    Init();
-    Evaluation();
+    //_board = Array.from(Array(DIM), () => new Array(DIM));
+    this.Init();
+    this.Evaluation();
   }
 
   static newGameBoard(g) {
     let newGameBoard = new GameBoard(Player.White);
-    newGameBoard.Board = Array.from(Array(DIM), () => new Array(DIM));
+    //newGameBoard.Board = Array.from(Array(DIM), () => new Array(DIM));
+
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        newGameBoard.Board()[(r, c)] = g.Board()[(r, c)];
+        newGameBoard.Board[(r, c)] = g.Board[(r, c)];
       }
     }
-    newGameBoard.LastMoves = new Array();
+    newGameBoard.LastMoves = [];
     newGameBoard.Scoring = [0, 0, 0];
-    newGameBoard.Passing = [g.Passing()[0], g.Passing()[1]];
-    Evaluation();
+    newGameBoard.Passing = [g.Passing[0], g.Passing[1]];
+    this.Evaluation();
     newGameBoard.NextPlayer = g.NextPlayer();
   }
 
@@ -443,22 +425,22 @@ class GameBoard {
 
   GetAt(row, col) {
     if (row >= 0 && row < DIM && col >= 0 && col < DIM) {
-      return this.Board()[(row, col)];
+      return this.Board[(row, col)];
     } else {
       return 0;
     }
   }
   SetAt(row, col, value) {
     if (row >= 0 && row < DIM && col >= 0 && col < DIM) {
-      this.Board()[(row, col)] = value;
+      this.Board[(row, col)] = value;
     }
   }
 
   Pass(player, setPass) {
     if (setPass == true) {
-      this.Passing()[player] = this.Passing()[player] + 1;
+      this.Passing[player] = this.Passing[player] + 1;
     } else {
-      this.Passing()[player] = 0;
+      this.Passing[player] = 0;
     }
   }
   CheckWin(player) {
@@ -490,11 +472,11 @@ class GameBoard {
       (this.Passing()[Player.White] == 1 && this.Passing()[Player.Black] == 1)
     ) {
       if (
-        Math.Abs(this.Scoring()[Player.White]) >
-        Math.Abs(this.Scoring()[Player.Black])
+        Math.abs(this.Scoring()[Player.White]) >
+        Math.abs(this.Scoring()[Player.Black])
       ) {
         winner = Player.White;
-        score = Math.Abs(this.Scoring()[Player.White]);
+        score = Math.abs(this.Scoring()[Player.White]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -507,11 +489,11 @@ class GameBoard {
         return obj;
       }
       if (
-        Math.Abs(this.Scoring()[Player.White]) <
-        Math.Abs(this.Scoring()[Player.Black])
+        Math.abs(this.Scoring()[Player.White]) <
+        Math.abs(this.Scoring()[Player.Black])
       ) {
         winner = Player.Black;
-        score = Math.Abs(this.Scoring()[Player.Black]);
+        score = Math.abs(this.Scoring()[Player.Black]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -524,7 +506,7 @@ class GameBoard {
         return obj;
       } else {
         winner = Player.None;
-        score = Math.Abs(this.Scoring()[Player.White]);
+        score = Math.abs(this.Scoring()[Player.White]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -553,14 +535,17 @@ class GameBoard {
     return player == Player.White ? 1 : -1;
   }
   ChangePlayer() {
-    this.NextPlayer =
-      this.NextPlayer() == Player.White ? Player.Black : Player.White;
+    if (this.NextPlayer === Player.White) {
+      this.NextPlayer = Player.Black;
+    } else {
+      this.NextPlayer = Player.White;
+    }
   }
   OtherPlayer(player) {
     return player == Player.White ? Player.Black : Player.White;
   }
   MakeMoveList() {
-    let moves = this.GetPossibleMoves(this.NextPlayer());
+    let moves = this.GetPossibleMoves(this.NextPlayer);
     return moves;
   }
   GetPossibleMoves(player) {
@@ -597,18 +582,18 @@ class GameBoard {
 
   Init() {
     this.NextPlayer = Player.White;
-    let chip = this.GetInitValue(NextPlayer);
+    let chip = this.GetInitValue(this.NextPlayer);
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        if (r % 2 == 0 && c == 0) {
+        if (r % 2 === 0 && c === 0) {
           this.NextPlayer = Player.White;
-        } else if (r % 2 == 1 && c == 0) {
+        } else if (r % 2 === 1 && c === 0) {
           this.NextPlayer = Player.Black;
         }
         this.ChangePlayer();
-        chip = this.GetInitValue(NextPlayer);
-        this.Board()[(r, c)] = chip;
-        this.Board()[(r, c + 1)] = chip;
+        chip = this.GetInitValue(this.NextPlayer);
+        this.Board[(r, c)] = chip;
+        this.Board[(r, c + 1)] = chip;
         c++;
       }
     }
@@ -618,7 +603,7 @@ class GameBoard {
     this.Board()[(move.From().Y(), move.From().X())] = 0;
     let currentWeight = this.Board()[(move.To().Y(), move.To().X())];
     this.Board()[(move.To().Y(), move.To().X())] =
-      (Math.Abs(currentWeight) + 1) * sign;
+      (Math.abs(currentWeight) + 1) * sign;
   }
   DoMove(move) {
     if (move.IsValid() && move.Applied() == false) {
@@ -732,8 +717,8 @@ class GameBoard {
     }
 
     if (
-      Math.Abs(this.Board()[(row, col)]) != 1 ||
-      Math.Abs(this.Board()[(To.Y(), To.X())]) == 0
+      Math.abs(this.Board()[(row, col)]) != 1 ||
+      Math.abs(this.Board()[(To.Y(), To.X())]) == 0
     ) {
       return 0;
     }
@@ -744,32 +729,32 @@ class GameBoard {
       case Direction.N:
         col = From.X();
         for (row = From.Y() - 1; row > To.Y(); row--) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
         }
         break;
       case Direction.E:
         row = From.Y();
         for (col = From.X() + 1; col < To.X(); col++) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
         }
         break;
       case Direction.S:
         col = From.X();
         for (row = From.Y() + 1; row < To.Y(); row++) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
         }
         break;
       case Direction.W:
         row = From.Y();
         for (col = From.X() - 1; col > To.X(); col--) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
         }
         break;
       case Direction.NE:
         col = From.X() + 1;
         row = From.Y() - 1;
         while (col < To.X() && row > To.Y()) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
           col++;
           row--;
         }
@@ -778,7 +763,7 @@ class GameBoard {
         col = From.X() - 1;
         row = From.Y() - 1;
         while (col > To.X() && row > To.Y()) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
           col--;
           row--;
         }
@@ -787,7 +772,7 @@ class GameBoard {
         col = From.X() + 1;
         row = From.Y() + 1;
         while (col < To.X() && row < To.Y()) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
           col++;
           row++;
         }
@@ -796,7 +781,7 @@ class GameBoard {
         col = From.X() - 1;
         row = From.Y() + 1;
         while (col > To.X() && row < To.Y()) {
-          intermediateDistance += Math.Abs(this.Board()[(row, col)]);
+          intermediateDistance += Math.abs(this.Board()[(row, col)]);
           col--;
           row++;
         }
@@ -808,22 +793,84 @@ class GameBoard {
   }
 
   Evaluation() {
-    this.Scoring()[Player.White] = 0;
-    this.Scoring()[Player.Black] = 0;
-    this.Scoring()[TOTAL] = 0;
+    this.Scoring[Player.White] = 0;
+    this.Scoring[Player.Black] = 0;
+    this.Scoring[TOTAL] = 0;
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        if (this.Board()[(r, c)] > 1) {
-          this.Scoring()[Player.White] += this.Board()[(r, c)];
-          this.Scoring()[TOTAL] += this.Board()[(r, c)];
-        } else if (this.Board()[(r, c)] < -1) {
-          this.Scoring()[Player.Black] += Math.Abs(this.Board()[(r, c)]);
-          this.Scoring()[TOTAL] += this.Board()[(r, c)];
+        if (this.Board[(r, c)] > 1) {
+          this.Scoring[Player.White] += this.Board[(r, c)];
+          this.Scoring[TOTAL] += this.Board[(r, c)];
+        } else if (this.Board[(r, c)] < -1) {
+          this.Scoring[Player.Black] += Math.abs(this.Board[(r, c)]);
+          this.Scoring[TOTAL] += this.Board[(r, c)];
         }
       }
     }
-    return this.Scoring()[TOTAL];
+    return this.Scoring[TOTAL];
   }
+}
+
+// Main Window
+let PeakBoard = null;
+let RedPlayer = "Human";
+let BluePlayer = "Human";
+let GameIsRunning = false;
+function Init() {
+  PeakBoard = new GameBoard(Player.White);
+  DrawBoard();
+}
+
+function DrawBoard() {
+  for (let row = 0; row < 6; row++) {
+    for (let col = 0; col < 6; col++) {
+      let button = GetGridElement(row, col);
+      if (button != null) {
+        let chip = PeakBoard.GetAt(row, col);
+        let val = "";
+        if (Math.abs(chip) >= 2) {
+          chip = Math.abs(chip);
+          val = chip.toString();
+        }
+        button.innerHTML = val;
+
+        if (chip > 0) {
+          button.classList.remove("itemblue");
+          button.classList.remove("itemblank");
+          button.classList.add("itemred");
+        } else if (chip < 0) {
+          button.classList.remove("itemred");
+          button.classList.remove("itemblank");
+          button.classList.add("itemblue");
+        } else {
+          button.classList.remove("itemred");
+          button.classList.remove("itemblue");
+          button.classList.add("itemblank");
+        }
+        FrameButton(button, false);
+      }
+    }
+  }
+}
+
+function FrameButton(button, frame) {
+  if (frame == true) {
+    button.classList.add("frame");
+  } else {
+    button.classList.remove("frame");
+  }
+}
+
+function GetGridElement(row, col) {
+  let itemName = `item${row}${col}`;
+  let buttons = document.getElementsByClassName("item");
+  for (let i = 0; i < buttons.length; i++) {
+    let button = buttons[i];
+    if (button.id === itemName) {
+      return button;
+    }
+  }
+  return null;
 }
 
 // User interactions
@@ -839,3 +886,6 @@ function mouse_click(obj) {
   obj.innerHTML = "X";
   document.getElementById("debug_output").innerHTML = "mouse_click " + obj.id;
 }
+
+// Start
+Init();
