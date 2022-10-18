@@ -332,32 +332,25 @@ class Move {
     return move.From.IsEqual(this.From) && move.To.IsEqual(this.To);
   }
   PreMove() {
-    this.PreValueFrom = this.MyBoard.Board[(this.From.Y, this.From.X)];
-    this.PreValueTo = this.MyBoard.Board[(this.To.Y, this.To.X)];
+    this.PreValueFrom = this.MyBoard.GetAt(this.From.Y, this.From.X);
+    this.PreValueTo = this.MyBoard.GetAt(this.To.Y, this.To.X);
   }
   PostMove() {
-    this.PostValueFrom = this.MyBoard.Board[(this.From.Y, this.From.X)];
-    this.PostValueTo = this.MyBoard.Board[(this.To.Y, this.To.X)];
+    this.PostValueFrom = this.MyBoard.GetAt(this.From.Y, this.From.X);
+    this.PostValueTo = this.MyBoard.GetAt(this.To.Y, this.To.X);
   }
   Undo() {
-    this.MyBoard.Board[(this.From.Y, this.From.X)] = this.PreValueFrom();
-    this.MyBoard.Board[(this.To.Y, this.To.X)] = this.PreValueTo();
+    this.MyBoard.SetAt(this.From.Y, this.From.X, this.PreValueFrom);
+    this.MyBoard.SetAt(this.To.Y, this.To.X, this.PreValueTo);
   }
 }
 
 // Gameboard
 class GameBoard {
-  _board = new Array(
-    new Array(0, 0, 0, 0, 0, 0),
-    new Array(0, 0, 0, 0, 0, 0),
-    new Array(0, 0, 0, 0, 0, 0),
-    new Array(0, 0, 0, 0, 0, 0),
-    new Array(0, 0, 0, 0, 0, 0),
-    new Array(0, 0, 0, 0, 0, 0)
-  );
-  _scoring = new Array(0, 0, 0);
-  _passing = new Array(0, 0);
-  _lastmoves = new Array();
+  _board = [];
+  _scoring = [0, 0, 0];
+  _passing = [0, 0];
+  _lastmoves = [];
   _nextplayer = Player.White;
 
   GetDim() {
@@ -371,17 +364,16 @@ class GameBoard {
       this._nextplayer = nextPlayer;
     }
     //_board = Array.from(Array(DIM), () => new Array(DIM));
-    this.Init();
+    this.InitBoard();
     this.Evaluation();
   }
 
   static newGameBoard(g) {
     let newGameBoard = new GameBoard(Player.White);
-    //newGameBoard.Board = Array.from(Array(DIM), () => new Array(DIM));
 
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        newGameBoard.Board[(r, c)] = g.Board[(r, c)];
+        newGameBoard.SetAt(r, c, g.GetAt(r, c));
       }
     }
     newGameBoard.LastMoves = [];
@@ -391,12 +383,6 @@ class GameBoard {
     newGameBoard.NextPlayer = g.NextPlayer();
   }
 
-  get Board() {
-    return this._board;
-  }
-  set Board(value) {
-    this._board = value;
-  }
   get Scoring() {
     return this._scoring;
   }
@@ -425,14 +411,14 @@ class GameBoard {
 
   GetAt(row, col) {
     if (row >= 0 && row < DIM && col >= 0 && col < DIM) {
-      return this.Board[(row, col)];
+      return this._board[row * DIM + col];
     } else {
       return 0;
     }
   }
   SetAt(row, col, value) {
     if (row >= 0 && row < DIM && col >= 0 && col < DIM) {
-      this.Board[(row, col)] = value;
+      this._board[row * DIM + col] = value;
     }
   }
 
@@ -446,9 +432,9 @@ class GameBoard {
   CheckWin(player) {
     let otherPlayer = OtherPlayer(player);
     if (
-      this.Passing()[Player.White] > 1 ||
-      this.Passing()[Player.Black] > 1 ||
-      (this.Passing()[Player.White] == 1 && this.Passing()[Player.Black] == 1)
+      this.Passing[Player.White] > 1 ||
+      this.Passing[Player.Black] > 1 ||
+      (this.Passing[Player.White] == 1 && this.Passing[Player.Black] == 1)
     ) {
       let score = Evaluation();
       if (player == Player.White && score > 0) return true;
@@ -467,16 +453,16 @@ class GameBoard {
     blackscore = this.Scoring()[Player.Black];
     totalscore = this.Scoring()[Player.None];
     if (
-      this.Passing()[Player.White] > 1 ||
-      this.Passing()[Player.Black] > 1 ||
-      (this.Passing()[Player.White] == 1 && this.Passing()[Player.Black] == 1)
+      this.Passing[Player.White] > 1 ||
+      this.Passing[Player.Black] > 1 ||
+      (this.Passing[Player.White] == 1 && this.Passing[Player.Black] == 1)
     ) {
       if (
-        Math.abs(this.Scoring()[Player.White]) >
-        Math.abs(this.Scoring()[Player.Black])
+        Math.abs(this.Scoring[Player.White]) >
+        Math.abs(this.Scoring[Player.Black])
       ) {
         winner = Player.White;
-        score = Math.abs(this.Scoring()[Player.White]);
+        score = Math.abs(this.Scoring[Player.White]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -489,11 +475,11 @@ class GameBoard {
         return obj;
       }
       if (
-        Math.abs(this.Scoring()[Player.White]) <
-        Math.abs(this.Scoring()[Player.Black])
+        Math.abs(this.Scoring[Player.White]) <
+        Math.abs(this.Scoring[Player.Black])
       ) {
         winner = Player.Black;
-        score = Math.abs(this.Scoring()[Player.Black]);
+        score = Math.abs(this.Scoring[Player.Black]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -506,7 +492,7 @@ class GameBoard {
         return obj;
       } else {
         winner = Player.None;
-        score = Math.abs(this.Scoring()[Player.White]);
+        score = Math.abs(this.Scoring[Player.White]);
         var obj = {
           WINNER: winner,
           SCORE: score,
@@ -532,7 +518,7 @@ class GameBoard {
   }
 
   GetInitValue(player) {
-    return player == Player.White ? 1 : -1;
+    return player === Player.White ? 1 : -1;
   }
   ChangePlayer() {
     if (this.NextPlayer === Player.White) {
@@ -545,19 +531,22 @@ class GameBoard {
     return player == Player.White ? Player.Black : Player.White;
   }
   MakeMoveList() {
-    let moves = this.GetPossibleMoves(this.NextPlayer);
+    let moves = this.GetPossibleMovesPlayer(this.NextPlayer);
     return moves;
   }
-  GetPossibleMoves(player) {
+  GetPossibleMovesPlayer(player) {
     let possibleMoves = new Array();
 
     let startChip = this.GetInitValue(player);
 
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        if (this.Board()[(r, c)] == startChip) {
+        if (this.GetAt(r, c) === startChip) {
           let position = new Position(r, c, this);
-          let movesFromPosition = this.GetPossibleMoves(player, position);
+          let movesFromPosition = this.GetPossibleMovesPosition(
+            player,
+            position
+          );
           let newMoves = possibleMoves.concat(movesFromPosition);
           possibleMoves = newMoves;
         }
@@ -565,7 +554,7 @@ class GameBoard {
     }
     return possibleMoves;
   }
-  GetPossibleMoves(player, pos) {
+  GetPossibleMovesPosition(player, pos) {
     let possibleMoves = new Array();
 
     for (let r = 0; r < DIM; r++) {
@@ -580,7 +569,7 @@ class GameBoard {
     return possibleMoves;
   }
 
-  Init() {
+  InitBoard() {
     this.NextPlayer = Player.White;
     let chip = this.GetInitValue(this.NextPlayer);
     for (let r = 0; r < DIM; r++) {
@@ -592,34 +581,44 @@ class GameBoard {
         }
         this.ChangePlayer();
         chip = this.GetInitValue(this.NextPlayer);
-        this.Board[(r, c)] = chip;
-        this.Board[(r, c + 1)] = chip;
+        this.SetAt(r, c, chip);
+        console.log(
+          `Cell:${r}${c} Player:${
+            this.NextPlayer
+          } Chip:${chip} Board:${this.GetAt(r, c)}\n`
+        );
         c++;
+        this.SetAt(r, c, chip);
+        console.log(
+          `Cell:${r}${c} Player:${
+            this.NextPlayer
+          } Chip:${chip} Board:${this.GetAt(r, c)}\n`
+        );
       }
     }
+    console.log(this.toString());
   }
   ApplyMove(move) {
-    let sign = this.Board()[(move.From().Y(), move.From().X())] >= 0 ? 1 : -1;
-    this.Board()[(move.From().Y(), move.From().X())] = 0;
-    let currentWeight = this.Board()[(move.To().Y(), move.To().X())];
-    this.Board()[(move.To().Y(), move.To().X())] =
-      (Math.abs(currentWeight) + 1) * sign;
+    let sign = this.GetAt(move.From.Y, move.From.X) >= 0 ? 1 : -1;
+    this.SetAt(move.From.Y, move.From.X, 0);
+    let currentWeight = this.GetAt(move.To.Y, move.To.X);
+    this.SetAt(move.To.Y, move.To.X, (Math.abs(currentWeight) + 1) * sign);
   }
   DoMove(move) {
-    if (move.IsValid() && move.Applied() == false) {
+    if (move.IsValid() && move.Applied == false) {
       move.PreMove();
       this.ApplyMove(move);
       move.PostMove();
       move.Applied = true;
-      this.LastMoves().Push(move);
+      this.LastMoves.Push(move);
       this.ChangePlayer();
     }
   }
   UndoMove(move) {
     if (
-      this.LastMoves().length > 0 &&
-      move.Applied() == true &&
-      move.IsEqual(this.LastMoves()[this.LastMoves().length - 1])
+      this.LastMoves.length > 0 &&
+      move.Applied == true &&
+      move.IsEqual(this.LastMoves[this.LastMoves.length - 1])
     ) {
       move.Undo();
       move.Applied = false;
@@ -628,8 +627,8 @@ class GameBoard {
     }
   }
   GetMovePositions(From, To, dir) {
-    let row = From.Y();
-    let col = From.X();
+    let row = From.Y;
+    let col = From.X;
     let movePositions = null;
     if (!From.IsValid()) {
       return movePositions;
@@ -643,60 +642,60 @@ class GameBoard {
       case Direction.INVALID:
         break;
       case Direction.N:
-        col = From.X();
-        for (row = From.Y() - 1; row > To.Y(); row--) {
+        col = From.X;
+        for (row = From.Y - 1; row > To.Y; row--) {
           movePositions.Push(new Position(row, col, this));
         }
         break;
       case Direction.E:
-        row = From.Y();
-        for (col = From.X() + 1; col < To.X(); col++) {
+        row = From.Y;
+        for (col = From.X + 1; col < To.X; col++) {
           movePositions.Push(new Position(row, col, this));
         }
         break;
       case Direction.S:
-        col = From.X();
-        for (row = From.Y() + 1; row < To.Y(); row++) {
+        col = From.X;
+        for (row = From.Y + 1; row < To.Y; row++) {
           movePositions.Push(new Position(row, col, this));
         }
         break;
       case Direction.W:
-        row = From.Y();
-        for (col = From.X() - 1; col > To.X(); col--) {
+        row = From.Y;
+        for (col = From.X - 1; col > To.X; col--) {
           movePositions.Push(new Position(row, col, this));
         }
         break;
       case Direction.NE:
-        col = From.X() + 1;
-        row = From.Y() - 1;
-        while (col < To.X() && row > To.Y()) {
+        col = From.X + 1;
+        row = From.Y - 1;
+        while (col < To.X && row > To.Y) {
           movePositions.Push(new Position(row, col, this));
           col++;
           row--;
         }
         break;
       case Direction.NW:
-        col = From.X() - 1;
-        row = From.Y() - 1;
-        while (col > To.X() && row > To.Y()) {
+        col = From.X - 1;
+        row = From.Y - 1;
+        while (col > To.X && row > To.Y) {
           movePositions.Push(new Position(row, col, this));
           col--;
           row--;
         }
         break;
       case Direction.SE:
-        col = From.X() + 1;
-        row = From.Y() + 1;
-        while (col < To.X() && row < To.Y()) {
+        col = From.X + 1;
+        row = From.Y + 1;
+        while (col < To.X && row < To.Y) {
           movePositions.Push(new Position(row, col, this));
           col++;
           row++;
         }
         break;
       case Direction.SW:
-        col = From.X() - 1;
-        row = From.Y() + 1;
-        while (col > To.X() && row < To.Y()) {
+        col = From.X - 1;
+        row = From.Y + 1;
+        while (col > To.X && row < To.Y) {
           movePositions.Push(new Position(row, col, this));
           col--;
           row++;
@@ -717,8 +716,8 @@ class GameBoard {
     }
 
     if (
-      Math.abs(this.Board()[(row, col)]) != 1 ||
-      Math.abs(this.Board()[(To.Y(), To.X())]) == 0
+      Math.abs(this.GetAt(row, col)) != 1 ||
+      Math.abs(this.GetAt(To.Y, To.X)) == 0
     ) {
       return 0;
     }
@@ -727,61 +726,61 @@ class GameBoard {
       case Direction.INVALID:
         break;
       case Direction.N:
-        col = From.X();
-        for (row = From.Y() - 1; row > To.Y(); row--) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X;
+        for (row = From.Y - 1; row > To.Y; row--) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
         }
         break;
       case Direction.E:
-        row = From.Y();
-        for (col = From.X() + 1; col < To.X(); col++) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        row = From.Y;
+        for (col = From.X + 1; col < To.X; col++) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
         }
         break;
       case Direction.S:
-        col = From.X();
-        for (row = From.Y() + 1; row < To.Y(); row++) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X;
+        for (row = From.Y + 1; row < To.Y; row++) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
         }
         break;
       case Direction.W:
-        row = From.Y();
-        for (col = From.X() - 1; col > To.X(); col--) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        row = From.Y;
+        for (col = From.X - 1; col > To.X; col--) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
         }
         break;
       case Direction.NE:
-        col = From.X() + 1;
-        row = From.Y() - 1;
-        while (col < To.X() && row > To.Y()) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X + 1;
+        row = From.Y - 1;
+        while (col < To.X && row > To.Y) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
           col++;
           row--;
         }
         break;
       case Direction.NW:
-        col = From.X() - 1;
-        row = From.Y() - 1;
-        while (col > To.X() && row > To.Y()) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X - 1;
+        row = From.Y - 1;
+        while (col > To.X && row > To.Y) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
           col--;
           row--;
         }
         break;
       case Direction.SE:
-        col = From.X() + 1;
-        row = From.Y() + 1;
-        while (col < To.X() && row < To.Y()) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X + 1;
+        row = From.Y + 1;
+        while (col < To.X && row < To.Y) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
           col++;
           row++;
         }
         break;
       case Direction.SW:
-        col = From.X() - 1;
-        row = From.Y() + 1;
-        while (col > To.X() && row < To.Y()) {
-          intermediateDistance += Math.abs(this.Board()[(row, col)]);
+        col = From.X - 1;
+        row = From.Y + 1;
+        while (col > To.X && row < To.Y) {
+          intermediateDistance += Math.abs(this.GetAt(row, col));
           col--;
           row++;
         }
@@ -798,16 +797,32 @@ class GameBoard {
     this.Scoring[TOTAL] = 0;
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
-        if (this.Board[(r, c)] > 1) {
-          this.Scoring[Player.White] += this.Board[(r, c)];
-          this.Scoring[TOTAL] += this.Board[(r, c)];
-        } else if (this.Board[(r, c)] < -1) {
-          this.Scoring[Player.Black] += Math.abs(this.Board[(r, c)]);
-          this.Scoring[TOTAL] += this.Board[(r, c)];
+        if (this.GetAt(r, c) > 1) {
+          this.Scoring[Player.White] += this.GetAt(r, c);
+          this.Scoring[TOTAL] += this.GetAt(r, c);
+        } else if (this.GetAt(r, c) < -1) {
+          this.Scoring[Player.Black] += Math.abs(this.GetAt(r, c));
+          this.Scoring[TOTAL] += this.GetAt(r, c);
         }
       }
     }
     return this.Scoring[TOTAL];
+  }
+
+  toString() {
+    let output = "";
+    for (let r = 0; r < DIM; r++) {
+      for (let c = 0; c < DIM; c++) {
+        if (this.GetAt(r, c) < 0) {
+          output += ` ${this.GetAt(r, c)} `;
+        } else {
+          output += `  ${this.GetAt(r, c)} `;
+        }
+      }
+      output += "\n";
+    }
+
+    return output;
   }
 }
 
@@ -816,8 +831,9 @@ let PeakBoard = null;
 let RedPlayer = "Human";
 let BluePlayer = "Human";
 let GameIsRunning = false;
-function Init() {
+function InitGame() {
   PeakBoard = new GameBoard(Player.White);
+  console.log(PeakBoard.toString());
   DrawBoard();
 }
 
@@ -888,4 +904,4 @@ function mouse_click(obj) {
 }
 
 // Start
-Init();
+InitGame();
