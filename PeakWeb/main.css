@@ -1,8 +1,30 @@
-.container {
+#board {
   display: grid;
   grid-template-columns: 100px 100px 100px 100px 100px 100px;
   grid-template-rows: 100px 100px 100px 100px 100px 100px;
   grid-gap: 1rem;
+  grid-area: board;
+}
+
+#panel_left {
+  grid-area: panel_left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#panel_right {
+  grid-area: panel_right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#wrapper {
+  grid-area: wrapper;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* OTHER STYLES */
@@ -13,6 +35,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#container {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 400px 800px 400px;
+  grid-template-rows: 100vh;
+  grid-template-areas: 'panel_left wrapper panel_right';
 }
 
 .itemorg {
@@ -41,7 +71,7 @@ body {
   color: #fff;
   border-radius: 10px;
   border: 2px solid #171717;
-   display: flex;
+  display: flex;
   /*this centers the text horizontally*/
   justify-content: center;
   /*this centers the text vertically*/
@@ -55,7 +85,7 @@ body {
   color: #fff;
   border-radius: 10px;
   border: 2px solid #171717;
-   display: flex;
+  display: flex;
   /*this centers the text horizontally*/
   justify-content: center;
   /*this centers the text vertically*/
@@ -72,4 +102,13 @@ body {
 
 .frame {
   border: 4px solid yellow;
+}
+
+.box {
+  background-color: #0d1f50;
+  color: #fff;
+  border-radius: 10px;
+  border: 1px solid #171717;
+  padding: 10px;
+  font-size: 150%;
 }
