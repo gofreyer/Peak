@@ -1,0 +1,73 @@
+body {
+  margin: 1px;
+}
+
+.panel_left {
+    grid-area: panel_left;
+  }
+
+  .panel_right {
+    grid-area: panel_right;
+  }
+
+  .board {
+    grid-area: board;
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .footer {
+    grid-area: footer;
+  }
+
+  .wrapper {
+    background-color: #fff;
+    color: #444;
+  }
+   
+@media (min-width: 0) {
+  .wrapper {
+    display: grid;
+    grid-gap: 5px;
+	grid-template-columns: var(--panelwidth) var(--panelwidth);
+	  grid-template-rows: var(--bannerheight) var(--panelheight) var(--boardsize) var(--bannerheight);
+    grid-template-areas:
+     "header header"
+     "panel_left panel_right"
+     "board board"
+     "footer footer";
+  }   
+}
+
+@media (min-width: 800px) and (orientation:landscape) {
+    .wrapper {
+		display: grid;
+      grid-gap: 5px;
+      grid-template-columns: var(--panelwidth) var(--boardsize) var(--panelwidth);
+	  grid-template-rows: var(--bannerheight) var(--panelheight) var(--bannerheight);
+      grid-template-areas:
+      "header  header  header"
+      "panel_left board panel_right"
+      "footer  footer  footer";
+    }
+}
+
+.box {
+  background-color: #444;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 150%; 
+}
+
+.header,
+.footer {
+  background-color: #999;
+}
+
+.panel_right {
+  background-color: #ccc;
+  color: #444;
+}
