@@ -86,7 +86,7 @@ class Algorithmn {
     let n = 0;
     board.MakeMoveList(nextMoves);
     n = nextMoves.length;
-    let bestMoves = new Array();
+    let bestMoves = [];
     if (n == 0) {
       bestvalue = board.Evaluation();
       var obj = {
@@ -275,7 +275,7 @@ class Move {
   }
 
   IsValid() {
-    var dir = GetDirection();
+    var dir = this.GetDirection();
     if (dir == Direction.INVALID || dir == Direction.NONE) {
       return false;
     }
@@ -296,15 +296,15 @@ class Move {
         Math.abs(this.From.X - this.To.X) != Math.abs(this.From.Y - this.To.Y))
     )
       return Direction.INVALID;
-    else if (this.From.X == this.To.X && this.From.Y == this.To.Y)
+    else if (this.From.X === this.To.X && this.From.Y === this.To.Y)
       return Direction.NONE;
-    else if (this.From.Y == this.To.Y && this.From.X < this.To.X)
+    else if (this.From.Y === this.To.Y && this.From.X < this.To.X)
       return Direction.E;
-    else if (this.From.Y == this.To.Y && this.From.X > this.To.X)
+    else if (this.From.Y === this.To.Y && this.From.X > this.To.X)
       return Direction.W;
-    else if (this.From.X == this.To.X && this.From.Y < this.To.Y)
+    else if (this.From.X === this.To.X && this.From.Y < this.To.Y)
       return Direction.S;
-    else if (this.From.X == this.To.X && this.From.Y > this.To.Y)
+    else if (this.From.X === this.To.X && this.From.Y > this.To.Y)
       return Direction.N;
     else if (this.From.X < this.To.X && this.From.Y > this.To.Y)
       return Direction.NE;
@@ -314,7 +314,7 @@ class Move {
       return Direction.SE;
     else if (this.From.X > this.To.X && this.From.Y < this.To.Y)
       return Direction.SW;
-    else return Direction.INVALID;
+    return Direction.INVALID;
   }
 
   GetMovePositions() {
@@ -363,7 +363,6 @@ class GameBoard {
     } else {
       this._nextplayer = nextPlayer;
     }
-    //_board = Array.from(Array(DIM), () => new Array(DIM));
     this.InitBoard();
     this.Evaluation();
   }
@@ -535,7 +534,7 @@ class GameBoard {
     return moves;
   }
   GetPossibleMovesPlayer(player) {
-    let possibleMoves = new Array();
+    let possibleMoves = [];
 
     let startChip = this.GetInitValue(player);
 
@@ -555,14 +554,14 @@ class GameBoard {
     return possibleMoves;
   }
   GetPossibleMovesPosition(player, pos) {
-    let possibleMoves = new Array();
+    let possibleMoves = [];
 
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
         let targetposition = new Position(r, c, this);
         let move = new Move(pos, targetposition, this);
         if (move.IsValid()) {
-          possibleMoves.Push(move);
+          possibleMoves.push(move);
         }
       }
     }
@@ -582,21 +581,13 @@ class GameBoard {
         this.ChangePlayer();
         chip = this.GetInitValue(this.NextPlayer);
         this.SetAt(r, c, chip);
-        console.log(
-          `Cell:${r}${c} Player:${
-            this.NextPlayer
-          } Chip:${chip} Board:${this.GetAt(r, c)}\n`
-        );
+        //console.log(`Cell:${r}${c} Player:${this.NextPlayer} Chip:${chip} Board:${this.GetAt(r, c)}\n`);
         c++;
         this.SetAt(r, c, chip);
-        console.log(
-          `Cell:${r}${c} Player:${
-            this.NextPlayer
-          } Chip:${chip} Board:${this.GetAt(r, c)}\n`
-        );
+        //console.log(`Cell:${r}${c} Player:${this.NextPlayer} Chip:${chip} Board:${this.GetAt(r, c)}\n`);
       }
     }
-    console.log(this.toString());
+    //console.log(this.toString());
   }
   ApplyMove(move) {
     let sign = this.GetAt(move.From.Y, move.From.X) >= 0 ? 1 : -1;
@@ -610,7 +601,7 @@ class GameBoard {
       this.ApplyMove(move);
       move.PostMove();
       move.Applied = true;
-      this.LastMoves.Push(move);
+      this.LastMoves.push(move);
       this.ChangePlayer();
     }
   }
@@ -633,9 +624,9 @@ class GameBoard {
     if (!From.IsValid()) {
       return movePositions;
     }
-    movePositions = new Array();
+    movePositions = [];
 
-    movePositions.Push(From);
+    movePositions.push(From);
 
     switch (dir) {
       case Direction.NONE:
@@ -644,32 +635,32 @@ class GameBoard {
       case Direction.N:
         col = From.X;
         for (row = From.Y - 1; row > To.Y; row--) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
         }
         break;
       case Direction.E:
         row = From.Y;
         for (col = From.X + 1; col < To.X; col++) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
         }
         break;
       case Direction.S:
         col = From.X;
         for (row = From.Y + 1; row < To.Y; row++) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
         }
         break;
       case Direction.W:
         row = From.Y;
         for (col = From.X - 1; col > To.X; col--) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
         }
         break;
       case Direction.NE:
         col = From.X + 1;
         row = From.Y - 1;
         while (col < To.X && row > To.Y) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
           col++;
           row--;
         }
@@ -678,7 +669,7 @@ class GameBoard {
         col = From.X - 1;
         row = From.Y - 1;
         while (col > To.X && row > To.Y) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
           col--;
           row--;
         }
@@ -687,7 +678,7 @@ class GameBoard {
         col = From.X + 1;
         row = From.Y + 1;
         while (col < To.X && row < To.Y) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
           col++;
           row++;
         }
@@ -696,7 +687,7 @@ class GameBoard {
         col = From.X - 1;
         row = From.Y + 1;
         while (col > To.X && row < To.Y) {
-          movePositions.Push(new Position(row, col, this));
+          movePositions.push(new Position(row, col, this));
           col--;
           row++;
         }
@@ -704,7 +695,7 @@ class GameBoard {
       default:
         break;
     }
-    movePositions.Push(To);
+    movePositions.push(To);
     return movePositions;
   }
   GetIntermediateDistance(From, To, dir) {
@@ -831,9 +822,18 @@ let PeakBoard = null;
 let RedPlayer = "Human";
 let BluePlayer = "Human";
 let GameIsRunning = false;
+let From = null;
+let To = null;
+let NextMoves = [];
+let NextMoveCount = 0;
+let FrameButtons = [];
+let FromButton = null;
+let ToButton = null;
+let HintMove = null;
+
 function InitGame() {
   PeakBoard = new GameBoard(Player.White);
-  console.log(PeakBoard.toString());
+  //console.log(PeakBoard.toString());
   DrawBoard();
 }
 
@@ -888,9 +888,24 @@ function GetGridElement(row, col) {
   }
   return null;
 }
+function GetButtonGridPosition(sender) {
+  let row = parseInt(sender.id.substring(4, 5));
+  let col = parseInt(sender.id.substring(5));
+  var obj = {
+    ROW: row,
+    COL: col,
+  };
+
+  return obj;
+}
+
+function MouseIsAllowed() {
+  return true;
+}
+function RemoveHint() {}
 
 // User interactions
-function mouse_click(obj) {
+function mouse_click_example(obj) {
   if (obj.classList.contains("itemblue")) {
     obj.classList.remove("itemblue");
     obj.classList.add("itemred");
@@ -903,5 +918,77 @@ function mouse_click(obj) {
   document.getElementById("debug_output").innerHTML = "mouse_click " + obj.id;
 }
 
+// click
+
+// mouseenter
+function button_mouseenter(obj) {
+  if (!MouseIsAllowed()) return;
+
+  RemoveHint();
+
+  let row, col;
+  let result = GetButtonGridPosition(obj);
+  row = result.ROW;
+  col = result.COL;
+
+  if (From == null) {
+    FrameButtons = [];
+    for (let m = 0; m < NextMoves.length; m++) {
+      let move = NextMoves[m];
+      if (move.From.X === col && move.From.Y === row) {
+        let button = GetGridElement(move.To.Y, move.To.X);
+        if (button != null) {
+          FrameButtons.push(button);
+          FrameButton(button, true);
+        }
+      }
+    }
+  }
+}
+
+// mousemove
+function button_mousemove(obj) {
+  if (!MouseIsAllowed()) return;
+
+  RemoveHint();
+
+  let row, col;
+  let result = GetButtonGridPosition(obj);
+  row = result.ROW;
+  col = result.COL;
+}
+
+// mouseleave
+function button_mouseleave(obj) {
+  if (!MouseIsAllowed()) return;
+
+  RemoveHint();
+
+  let row, col;
+  let result = GetButtonGridPosition(obj);
+  row = result.ROW;
+  col = result.COL;
+
+  if (From == null) {
+    for (let b = 0; b < FrameButtons.length; b++) {
+      let button = FrameButtons[b];
+      if (button != null) {
+        FrameButton(button, false);
+      }
+    }
+  }
+}
+
 // Start
 InitGame();
+
+NextMoves = PeakBoard.MakeMoveList();
+NextMovesCount = NextMoves.length;
+
+/*
+let from = new Position(1, 1, PeakBoard);
+let to = new Position(3, 3, PeakBoard);
+let move = new Move(from, to, PeakBoard);
+let dir = move.GetDirection();
+console.log(dir);
+*/
