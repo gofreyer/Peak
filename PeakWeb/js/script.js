@@ -852,8 +852,8 @@ function InitGame() {
   ActionButtonEnable(goButton, true);
   ActionButtonEnable(passButton, false);
 
-  ItemVisible(winLeft, false);
-  ItemVisible(winRight, false);
+  ItemVisible(winLeft, true);
+  ItemVisible(winRight, true);
   ItemVisible(passLeft, true);
   ItemVisible(passRight, true);
 
