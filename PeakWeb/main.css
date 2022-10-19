@@ -1,4 +1,5 @@
 #board {
+  margin-bottom:200px;
   display: grid;
   grid-template-columns: 100px 100px 100px 100px 100px 100px;
   grid-template-rows: 100px 100px 100px 100px 100px 100px;
@@ -6,18 +7,18 @@
   grid-area: board;
 }
 
+.panel {
+  display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
 #panel_left {
   grid-area: panel_left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #panel_right {
   grid-area: panel_right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #wrapper {
@@ -25,6 +26,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.middle {
+  display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 10fr 1fr;
 }
 
 /* OTHER STYLES */
@@ -41,7 +48,7 @@ body {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: 400px 800px 400px;
-  grid-template-rows: 100vh;
+  grid-template-rows: 95vh;
   grid-template-areas: 'panel_left wrapper panel_right';
 }
 
@@ -111,4 +118,93 @@ body {
   border: 1px solid #171717;
   padding: 10px;
   font-size: 150%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+.bbox {
+  background-color: #0d1f50;
+  color: #fff;
+  padding: 10px;
+  font-size: 150%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tied {
+  width: 200px;
+  height: 200px;
+}
+
+.winner {
+  width: 250px;
+  height: 250px;
+}
+
+.loser {
+  width: 150px;
+  height: 150px;
+}
+
+.pass {
+  width: 40px;
+  height: 40px;
+  border-radius: 15px;
+}
+
+.itemwin {
+  width: 100px;
+  height: 100px;
+  border-radius: 40px;
+  background-color: goldenrod;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  color: #fff;
+  border: 2px solid #171717;
+}
+
+.player_select {
+
+  font-size: 15px;
+  font-weight: 300;
+  padding: 1em;
+  margin: 1em;
+  background-color: #3b404e;
+  color: #eee8a9;
+  font-family: sans-serif;
+  border: 1px solid;
+  border-radius: 0.5em;
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  width:180px;
+  vertical-align: bottom;
+}
+.player_select:hover {
+  box-shadow: 0 0.5em 0.5em -0.3em black;
+  transform: translateY(-0.25em);
+  color: white;
+  border-color: white;
+}
+
+.action_button {
+  font-size: 20px;
+  font-weight: 500;
+  padding: 1em;
+  margin: 1em;
+  background-color: #3b404e;
+  color: #eee8a9;
+  font-family: sans-serif;
+  border: 1px solid;
+  border-radius: 1em;
+  transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  width:150px;
+}
+
+.action_button:hover {
+  box-shadow: 0 0.5em 0.5em -0.3em black;
+  transform: translateY(-0.25em);
+  color: white;
+  border-color: white;
+}
+ 
+
+
