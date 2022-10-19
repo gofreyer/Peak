@@ -24,3 +24,5 @@ https://en.wikipedia.org/wiki/Minimax
 By moving the numerical values in this way, gradually higher numerical values of the respective move colours are created. No move can be made from a square with a numerical value higher than 1. Thus, it is often the case that a move is made from a square only once in the game.
 
 Those who cannot move according to the rules must pass. If the subsequent move of the other player offers new possibilities, the game continues. If not, the game ends. For each number field of a colour with a value greater than or equal to 2, one receives the respective colour points. The player who has the most wins the game.
+
+The Syne font from https://gitlab.com/bonjour-monde/fonderie/syne-typeface is gratefully used for the web application.
