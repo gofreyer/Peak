@@ -831,10 +831,66 @@ let FromButton = null;
 let ToButton = null;
 let HintMove = null;
 
+let winLeft = document.getElementById("win_left_item");
+let winRight = document.getElementById("win_right_item");
+let scoreLeft = document.getElementById("score_left_item");
+let scoreRight = document.getElementById("score_right_item");
+let passLeft = document.getElementById("pass_left_item");
+let passRight = document.getElementById("pass_right_item");
+let playerSelectLeft = document.getElementById("player_left_select");
+let playerSelectRight = document.getElementById("player_right_select");
+
+let goButton = document.getElementById("go");
+let newButton = document.getElementById("new");
+let passButton = document.getElementById("pass");
+
 function InitGame() {
   PeakBoard = new GameBoard(Player.White);
   //console.log(PeakBoard.toString());
+
+  ActionButtonEnable(newButton, true);
+  ActionButtonEnable(goButton, false);
+  ActionButtonEnable(passButton, false);
+
+  /*
+  goButton.disabled = true;
+  goButton.classList.add("action_disabled");
+
+  newButton.disabled = false;
+  newButton.classList.remove("action_disabled");
+
+  passButton.disabled = true;
+  passButton.classList.add("action_disabled");
+  */
+
+  scoreLeft.innerHTML = "0";
+  scoreLeft.classList.remove("winner");
+  scoreLeft.classList.remove("loser");
+  scoreLeft.classList.add("tied");
+  scoreRight.innerHTML = "0";
+  scoreRight.classList.remove("winner");
+  scoreRight.classList.remove("loser");
+  scoreRight.classList.add("tied");
+
+  winLeft.style.visibility = "hidden";
+  winRight.style.visibility = "hidden";
+  passLeft.style.visibility = "hidden";
+  passRight.style.visibility = "hidden";
+
+  playerSelectLeft.value = "human";
+  playerSelectRight.value = "minmax3";
+
   DrawBoard();
+}
+
+function ActionButtonEnable(action, enable) {
+  if (enable === false) {
+    action.disabled = true;
+    action.classList.add("action_disabled");
+  } else {
+    action.disabled = false;
+    action.classList.remove("action_disabled");
+  }
 }
 
 function DrawBoard() {
@@ -844,9 +900,8 @@ function DrawBoard() {
       if (button != null) {
         let chip = PeakBoard.GetAt(row, col);
         let val = "";
-        if (Math.abs(chip) >= 2) {
-          chip = Math.abs(chip);
-          val = chip.toString();
+        if (Math.abs(chip) >= 0 /*2*/) {
+          val = Math.abs(chip).toString();
         }
         button.innerHTML = val;
 
