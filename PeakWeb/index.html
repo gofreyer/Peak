@@ -24,6 +24,7 @@
             name="player_left"
             id="player_left_select"
             class="player_select"
+            onchange="player_select_change(this)"
           >
             <option value="human">Human Player</option>
             <option value="random">Random</option>
@@ -41,7 +42,7 @@
           <div id="board">
             <div
               id="item00"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -49,7 +50,7 @@
             ></div>
             <div
               id="item01"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -57,7 +58,7 @@
             ></div>
             <div
               id="item02"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -65,7 +66,7 @@
             ></div>
             <div
               id="item03"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -73,7 +74,7 @@
             ></div>
             <div
               id="item04"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -81,7 +82,7 @@
             ></div>
             <div
               id="item05"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -90,7 +91,7 @@
 
             <div
               id="item10"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -98,7 +99,7 @@
             ></div>
             <div
               id="item11"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -106,7 +107,7 @@
             ></div>
             <div
               id="item12"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -114,7 +115,7 @@
             ></div>
             <div
               id="item13"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -122,7 +123,7 @@
             ></div>
             <div
               id="item14"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -130,7 +131,7 @@
             ></div>
             <div
               id="item15"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -139,7 +140,7 @@
 
             <div
               id="item20"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -147,7 +148,7 @@
             ></div>
             <div
               id="item21"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -155,7 +156,7 @@
             ></div>
             <div
               id="item22"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -163,7 +164,7 @@
             ></div>
             <div
               id="item23"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -171,7 +172,7 @@
             ></div>
             <div
               id="item24"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -179,7 +180,7 @@
             ></div>
             <div
               id="item25"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -188,7 +189,7 @@
 
             <div
               id="item30"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -196,7 +197,7 @@
             ></div>
             <div
               id="item31"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -204,7 +205,7 @@
             ></div>
             <div
               id="item32"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -212,7 +213,7 @@
             ></div>
             <div
               id="item33"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -220,7 +221,7 @@
             ></div>
             <div
               id="item34"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -228,7 +229,7 @@
             ></div>
             <div
               id="item35"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -237,7 +238,7 @@
 
             <div
               id="item40"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -245,7 +246,7 @@
             ></div>
             <div
               id="item41"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -253,7 +254,7 @@
             ></div>
             <div
               id="item42"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -261,7 +262,7 @@
             ></div>
             <div
               id="item43"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -269,7 +270,7 @@
             ></div>
             <div
               id="item44"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -277,7 +278,7 @@
             ></div>
             <div
               id="item45"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -286,7 +287,7 @@
 
             <div
               id="item50"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -294,7 +295,7 @@
             ></div>
             <div
               id="item51"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -302,7 +303,7 @@
             ></div>
             <div
               id="item52"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -310,7 +311,7 @@
             ></div>
             <div
               id="item53"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -318,7 +319,7 @@
             ></div>
             <div
               id="item54"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -326,7 +327,7 @@
             ></div>
             <div
               id="item55"
-              onclick="mouse_click(this)"
+              onclick="button_mouseclick(this)"
               onmouseenter="button_mouseenter(this)"
               onmousemove="button_mousemove(this)"
               onmouseleave="button_mouseleave(this)"
@@ -357,6 +358,7 @@
             name="player_right"
             id="player_right_select"
             class="player_select"
+            onchange="player_select_change(this)"
           >
             <option value="human">Human Player</option>
             <option value="random">Random</option>

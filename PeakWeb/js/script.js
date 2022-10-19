@@ -819,8 +819,8 @@ class GameBoard {
 
 // Main Window
 let PeakBoard = null;
-let RedPlayer = "Human";
-let BluePlayer = "Human";
+let RedPlayer = "human";
+let BluePlayer = "human";
 let GameIsRunning = false;
 let From = null;
 let To = null;
@@ -849,7 +849,7 @@ function InitGame() {
   //console.log(PeakBoard.toString());
 
   ActionButtonEnable(newButton, true);
-  ActionButtonEnable(goButton, false);
+  ActionButtonEnable(goButton, true);
   ActionButtonEnable(passButton, false);
 
   ItemVisible(winLeft, false);
@@ -863,6 +863,12 @@ function InitGame() {
   playerSelectRight.value = "minmax3";
 
   DrawBoard();
+
+  RedPlayer = "human";
+  RedPlayer = playerSelectLeft.value;
+
+  BluePlayer = "human";
+  BluePlayer = playerSelectLeft.value;
 }
 
 function ActionButtonEnable(action, enable) {
@@ -921,7 +927,7 @@ function DrawBoard() {
       if (button != null) {
         let chip = PeakBoard.GetAt(row, col);
         let val = "";
-        if (Math.abs(chip) >= 0 /*2*/) {
+        if (Math.abs(chip) >= 2) {
           val = Math.abs(chip).toString();
         }
         button.innerHTML = val;
@@ -976,6 +982,11 @@ function GetButtonGridPosition(sender) {
 }
 
 function MouseIsAllowed() {
+  if (!GameIsRunning) return false;
+  if (PeakBoard.NextPlayer === Player.White && RedPlayer != "human")
+    return false;
+  if (PeakBoard.NextPlayer == Player.Black && BluePlayer != "human")
+    return false;
   return true;
 }
 function RemoveHint() {}
@@ -995,6 +1006,9 @@ function mouse_click_example(obj) {
 }
 
 // click
+function button_mouseclick(obj) {
+  if (!MouseIsAllowed()) return;
+}
 
 // mouseenter
 function button_mouseenter(obj) {
@@ -1053,6 +1067,14 @@ function button_mouseleave(obj) {
       }
     }
   }
+}
+
+// select_change
+function player_select_change(select) {
+  RedPlayer = playerSelectLeft.value;
+  BluePlayer = playerSelectRight.value;
+
+  console.log(`RedPlayer: ${RedPlayer} BluePlayer: ${BluePlayer}\n`);
 }
 
 // Start
