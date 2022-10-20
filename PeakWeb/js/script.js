@@ -67,18 +67,19 @@ class Algorithmn {
     let MinValue = -999999;
     let MaxValue = +999999;
 
-    let bestvalue = board.NextPlayer == Player.White ? MinValue : MaxValue;
+    let bestvalue = board.NextPlayer === Player.White ? MinValue : MaxValue;
     let otherPlayer =
-      board.NextPlayer == Player.White ? Player.Black : Player.White;
+      board.NextPlayer === Player.White ? Player.Black : Player.White;
 
     if (board.CheckWin(otherPlayer)) {
+      bestvalue = board.Evaluation();
       var obj = {
         VALUE: bestvalue,
         MOVE: bestmove,
       };
       return obj;
     }
-    if (depth == 0) {
+    if (depth === 0) {
       bestvalue = board.Evaluation();
       var obj = {
         VALUE: bestvalue,
@@ -107,13 +108,13 @@ class Algorithmn {
       let nextbestmove = result.MOVE;
       board.UndoMove(move);
 
-      if (board.NextPlayer == Player.White) {
+      if (board.NextPlayer === Player.White) {
         if (value > bestvalue) {
           bestvalue = value;
           bestmove = move;
           bestMoves = [];
           bestMoves.push(move);
-        } else if (value == bestvalue) {
+        } else if (value === bestvalue) {
           bestMoves.push(move);
         }
       } else {
@@ -122,7 +123,7 @@ class Algorithmn {
           bestmove = move;
           bestMoves = [];
           bestMoves.push(move);
-        } else if (value == bestvalue) {
+        } else if (value === bestvalue) {
           bestMoves.push(move);
         }
       }
@@ -854,11 +855,9 @@ function InitGame() {
 
   DrawBoard();
 
-  RedPlayer = 'human';
   RedPlayer = playerSelectLeft.value;
-
-  BluePlayer = 'human';
-  BluePlayer = playerSelectLeft.value;
+  BluePlayer = playerSelectRight.value;
+  console.log(`RedPlayer: ${RedPlayer} BluePlayer: ${BluePlayer}\n`);
 }
 
 function ActionButtonEnable(action, enable) {
@@ -1029,14 +1028,14 @@ function GetPlayerColor(player) {
   return 'WHITE';
 }
 
-function GetPlayerName(select) {
-  if (select === 'human') return 'Human Player';
-  if (select === 'random') return 'Random';
-  if (select === 'minmax1') return 'MiniMax One';
-  if (select === 'minmax2') return 'MiniMax Two';
-  if (select === 'minmax3') return 'MiniMax Three';
-  if (select === 'minmax4') return 'MiniMax Four';
-  if (select === 'minmax5') return 'MiniMax Five';
+function GetPlayerName(player) {
+  if (player === 'human') return 'Human Player';
+  if (player === 'random') return 'Random';
+  if (player === 'minmax1') return 'MiniMax One';
+  if (player === 'minmax2') return 'MiniMax Two';
+  if (player === 'minmax3') return 'MiniMax Three';
+  if (player === 'minmax4') return 'MiniMax Four';
+  if (player === 'minmax5') return 'MiniMax Five';
   return 'WHITE';
 }
 
@@ -1168,9 +1167,11 @@ function button_mouseleave(obj) {
 
 // select_change
 function player_select_change(select) {
-  RedPlayer = playerSelectLeft.value;
-  BluePlayer = playerSelectRight.value;
-
+  if (select.id === 'player_left_select') {
+    RedPlayer = select.value;
+  } else if (select.id === 'player_right_select') {
+    BluePlayer = select.value;
+  }
   console.log(`RedPlayer: ${RedPlayer} BluePlayer: ${BluePlayer}\n`);
 }
 
@@ -1182,20 +1183,23 @@ async function NextTurn() {
   DrawTitle(
     `${GetPlayerColor(Player.White)} is ${GetPlayerName(
       RedPlayer
-    )}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${GetPlayerColor(
+    )}&nbsp;&nbsp;&nbsp;&nbsp;${GetPlayerColor(
       Player.Black
     )} is ${GetPlayerName(BluePlayer)}`
   );
 
   if (currentPlayer === Player.White && RedPlayer === 'human') return;
-  if (currentPlayer === Player.Black && BluePlayer == 'human') return;
+  if (currentPlayer === Player.Black && BluePlayer === 'human') return;
 
   // Waitcursor
+  root.style.cursor = 'wait';
+
   let bestMove = null;
   if (currentPlayer === Player.White) {
     if (RedPlayer === 'random') {
       bestMove = Algorithmn.RandomMove(PeakBoard);
-      if (bestMove != null) console.log(bestMove.toString());
+      if (bestMove != null)
+        console.log(bestMove.toString(), currentPlayer, RedPlayer);
     } else {
       let maxDepth = 1;
       if (RedPlayer === 'minmax1') maxDepth = 1;
@@ -1206,17 +1210,20 @@ async function NextTurn() {
       let depth = 1;
       if (NextMovesCount > 0) {
         depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
+        depth++;
         if (depth < 1) depth = 1;
         if (depth > maxDepth) depth = maxDepth;
       }
       let result = Algorithmn.MinMaxMove(PeakBoard, depth);
       bestMove = result.MOVE;
-      if (bestMove != null) console.log(bestMove.toString());
+      if (bestMove != null)
+        console.log(bestMove.toString(), currentPlayer, RedPlayer, depth);
     }
   } else if (currentPlayer === Player.Black) {
     if (BluePlayer === 'random') {
       bestMove = Algorithmn.RandomMove(PeakBoard);
-      if (bestMove != null) console.log(bestMove.toString());
+      if (bestMove != null)
+        console.log(bestMove.toString(), currentPlayer, BluePlayer);
     } else {
       let maxDepth = 1;
       if (BluePlayer === 'minmax1') maxDepth = 1;
@@ -1227,16 +1234,19 @@ async function NextTurn() {
       let depth = 1;
       if (NextMovesCount > 0) {
         depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
+        depth++;
         if (depth < 1) depth = 1;
         if (depth > maxDepth) depth = maxDepth;
       }
       let result = Algorithmn.MinMaxMove(PeakBoard, depth);
       bestMove = result.MOVE;
-      if (bestMove != null) console.log(bestMove.toString());
+      if (bestMove != null)
+        console.log(bestMove.toString(), currentPlayer, BluePlayer, depth);
     }
   }
 
   // NoWaitcursor
+  root.style.cursor = 'auto';
 
   if (bestMove != null) {
     await ShowAnimateMove(bestMove, 850);
@@ -1347,7 +1357,6 @@ function DrawTitle(title) {
 }
 
 function getDimensions() {
-  var root = document.documentElement;
   let width = window.innerWidth;
   let height = 0; /*window.innerHeight*/
 
@@ -1366,11 +1375,12 @@ function getDimensions() {
 }
 
 // Initial
+let root = document.documentElement;
 let myUnit = getDimensions();
 
 let PeakBoard = null;
-let RedPlayer = 'human';
-let BluePlayer = 'human';
+let RedPlayer = 'minmax2';
+let BluePlayer = 'minmax4';
 let GameIsRunning = false;
 let From = null;
 let To = null;
@@ -1396,9 +1406,8 @@ let goButton = document.getElementById('go');
 let newButton = document.getElementById('new');
 let passButton = document.getElementById('pass');
 
-playerSelectLeft.value = 'human';
-playerSelectRight.value = 'minmax3';
-player_select_change(playerSelectLeft);
+playerSelectLeft.value = RedPlayer;
+playerSelectRight.value = BluePlayer;
 
 // Start
 InitGame();
