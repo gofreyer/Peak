@@ -335,9 +335,25 @@
             ></div>
           </div>
           <div id="actions" class="bbox">
-            <button id="go" class="action_button action_disabled">Go</button>
-            <button id="new" class="action_button">New</button>
-            <button id="pass" class="action_button action_disabled">
+            <button
+              id="go"
+              class="action_button action_disabled"
+              onclick="go_mouseclick(this)"
+            >
+              Go
+            </button>
+            <button
+              id="new"
+              class="action_button"
+              onclick="new_mouseclick(this)"
+            >
+              New
+            </button>
+            <button
+              id="pass"
+              class="action_button action_disabled"
+              onclick="pass_mouseclick(this)"
+            >
               Pass
             </button>
           </div>

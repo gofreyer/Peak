@@ -18,6 +18,10 @@ async function test() {
   console.log("After sleep function");
 }
 
+async function WaitNMilliSeconds(milliseconds) {
+  await Sleep(milliseconds);
+}
+
 const Player = {
   White: 0,
   Black: 1,
@@ -45,7 +49,7 @@ class Algorithmn {
   static RandomMove(board) {
     let move = null;
     let n = 0;
-    board.MakeMoveList(nextMoves);
+    let nextMoves = board.MakeMoveList();
     n = nextMoves.length;
     if (n > 0) {
       let m = 0;
@@ -84,7 +88,7 @@ class Algorithmn {
     }
 
     let n = 0;
-    board.MakeMoveList(nextMoves);
+    let nextMoves = board.MakeMoveList();
     n = nextMoves.length;
     let bestMoves = [];
     if (n == 0) {
@@ -98,11 +102,13 @@ class Algorithmn {
     for (let i = 0; i < n; i++) {
       let move = nextMoves[i];
       board.DoMove(move);
-      let { value, nextbestmove } = MinMaxMove(board, depth - 1);
+      let result = this.MinMaxMove(board, depth - 1);
+      let value = result.VALUE;
+      let nextbestmove = result.MOVE;
       board.UndoMove(move);
 
       if (board.NextPlayer == Player.White) {
-        if (value > bestValue) {
+        if (value > bestvalue) {
           bestvalue = value;
           bestmove = move;
           bestMoves = [];
@@ -111,7 +117,7 @@ class Algorithmn {
           bestMoves.push(move);
         }
       } else {
-        if (value < bestValue) {
+        if (value < bestvalue) {
           bestvalue = value;
           bestmove = move;
           bestMoves = [];
@@ -130,7 +136,7 @@ class Algorithmn {
       bestmove = bestMoves[m];
     } else {
       bestmove = null;
-      bestValue = board.Evaluation();
+      bestvalue = board.Evaluation();
     }
     var obj = {
       VALUE: bestvalue,
@@ -191,6 +197,10 @@ class Position {
   }
   IsEqual(pos) {
     return pos.X == this.X && pos.Y == this.Y;
+  }
+
+  toString() {
+    return `Row[${this.Y}]Col[${this.X}]`;
   }
 }
 
@@ -319,7 +329,7 @@ class Move {
 
   GetMovePositions() {
     let movePositions = null;
-    let dir = GetDirection();
+    let dir = this.GetDirection();
     if (dir == Direction.INVALID || dir == Direction.NONE) {
       return movePositions;
     }
@@ -342,6 +352,12 @@ class Move {
   Undo() {
     this.MyBoard.SetAt(this.From.Y, this.From.X, this.PreValueFrom);
     this.MyBoard.SetAt(this.To.Y, this.To.X, this.PreValueTo);
+  }
+  toString() {
+    return `${this.From.toString()} -> ${this.To.toString()} ${this.MyBoard.GetAt(
+      this.To.Y,
+      this.To.X
+    )}+1`;
   }
 }
 
@@ -429,13 +445,13 @@ class GameBoard {
     }
   }
   CheckWin(player) {
-    let otherPlayer = OtherPlayer(player);
+    let otherPlayer = this.OtherPlayer(player);
     if (
       this.Passing[Player.White] > 1 ||
       this.Passing[Player.Black] > 1 ||
       (this.Passing[Player.White] == 1 && this.Passing[Player.Black] == 1)
     ) {
-      let score = Evaluation();
+      let score = this.Evaluation();
       if (player == Player.White && score > 0) return true;
       if (player == Player.Black && score < 0) return true;
     }
@@ -447,10 +463,10 @@ class GameBoard {
     let whitescore = 0;
     let blackscore = 0;
     let totalscore = 0;
-    Evaluation();
-    whitescore = this.Scoring()[Player.White];
-    blackscore = this.Scoring()[Player.Black];
-    totalscore = this.Scoring()[Player.None];
+    this.Evaluation();
+    whitescore = this.Scoring[Player.White];
+    blackscore = this.Scoring[Player.Black];
+    totalscore = this.Scoring[Player.None];
     if (
       this.Passing[Player.White] > 1 ||
       this.Passing[Player.Black] > 1 ||
@@ -527,7 +543,7 @@ class GameBoard {
     }
   }
   OtherPlayer(player) {
-    return player == Player.White ? Player.Black : Player.White;
+    return player === Player.White ? Player.Black : Player.White;
   }
   MakeMoveList() {
     let moves = this.GetPossibleMovesPlayer(this.NextPlayer);
@@ -613,7 +629,7 @@ class GameBoard {
     ) {
       move.Undo();
       move.Applied = false;
-      this.LastMoves.Pop();
+      this.LastMoves.pop();
       this.ChangePlayer();
     }
   }
@@ -818,49 +834,23 @@ class GameBoard {
 }
 
 // Main Window
-let PeakBoard = null;
-let RedPlayer = "human";
-let BluePlayer = "human";
-let GameIsRunning = false;
-let From = null;
-let To = null;
-let NextMoves = [];
-let NextMoveCount = 0;
-let FrameButtons = [];
-let FromButton = null;
-let ToButton = null;
-let HintMove = null;
-
-let winLeft = document.getElementById("win_left_item");
-let winRight = document.getElementById("win_right_item");
-let scoreLeft = document.getElementById("score_left_item");
-let scoreRight = document.getElementById("score_right_item");
-let passLeft = document.getElementById("pass_left_item");
-let passRight = document.getElementById("pass_right_item");
-let playerSelectLeft = document.getElementById("player_left_select");
-let playerSelectRight = document.getElementById("player_right_select");
-
-let goButton = document.getElementById("go");
-let newButton = document.getElementById("new");
-let passButton = document.getElementById("pass");
-
 function InitGame() {
+  DrawTitle("Peak!");
+
   PeakBoard = new GameBoard(Player.White);
   //console.log(PeakBoard.toString());
+
+  GameIsRunning = false;
 
   ActionButtonEnable(newButton, true);
   ActionButtonEnable(goButton, true);
   ActionButtonEnable(passButton, false);
 
-  ItemVisible(winLeft, true);
-  ItemVisible(winRight, true);
-  ItemVisible(passLeft, true);
-  ItemVisible(passRight, true);
-
   ScoreBoard(0, 0);
-
-  playerSelectLeft.value = "human";
-  playerSelectRight.value = "minmax3";
+  PassingDisplay(
+    PeakBoard.Passing[Player.White],
+    PeakBoard.Passing[Player.Black]
+  );
 
   DrawBoard();
 
@@ -920,7 +910,40 @@ function ScoreBoard(leftscore, rightscore) {
   }
 }
 
-function DrawBoard() {
+function PassingDisplay(leftpass, rightpass) {
+  ItemVisible(passLeft, leftpass > 0);
+  ItemVisible(passRight, rightpass > 0);
+}
+
+function WinDisplay(isGameOver, winner) {
+  if (!isGameOver) {
+    ItemVisible(winLeft, false);
+    ItemVisible(winRight, false);
+  } else {
+    if (winner === Player.None) {
+      ItemVisible(winLeft, true);
+      ItemVisible(winRight, true);
+    } else if (winner === Player.White) {
+      ItemVisible(winLeft, true);
+      ItemVisible(winRight, false);
+    } else if (winner === Player.Black) {
+      ItemVisible(winLeft, false);
+      ItemVisible(winRight, true);
+    }
+  }
+}
+
+function TurnDisplay(isGameOver, nextPlayer) {
+  if (isGameOver || !GameIsRunning) {
+    TurnButton(scoreLeft, false);
+    TurnButton(scoreRight, false);
+  } else {
+    TurnButton(scoreLeft, nextPlayer === Player.White);
+    TurnButton(scoreRight, nextPlayer === Player.Black);
+  }
+}
+
+async function DrawBoard() {
   for (let row = 0; row < 6; row++) {
     for (let col = 0; col < 6; col++) {
       let button = GetGridElement(row, col);
@@ -949,6 +972,72 @@ function DrawBoard() {
       }
     }
   }
+  let winner, score, whitescore, blackscore, totalscore, isGameOver, theOther;
+
+  let result = PeakBoard.GameOver();
+  winner = result.WINNER;
+  score = result.SCORE;
+  whitescore = result.WHITESCORE;
+  blackscore = result.BLACKSCORE;
+  totalscore = result.TOTALSCORE;
+  isGameOver = result.GAMEOVER;
+
+  if (GameIsRunning && isGameOver) {
+    if (winner == Player.None) {
+      DrawTitle("Tie Game!");
+    } else {
+      theOther = PeakBoard.OtherPlayer(winner);
+      let theOtherScore =
+        score == Math.abs(whitescore)
+          ? Math.abs(blackscore)
+          : Math.abs(whitescore);
+      DrawTitle(`${GetPlayerColor(winner)} wins!`);
+    }
+    GameIsRunning = false;
+    ActionButtonEnable(newButton, true);
+    ActionButtonEnable(goButton, false);
+    ActionButtonEnable(passButton, false);
+  } else if (GameIsRunning) {
+  }
+
+  ScoreBoard(whitescore, blackscore);
+  PassingDisplay(
+    PeakBoard.Passing[Player.White],
+    PeakBoard.Passing[Player.Black]
+  );
+  WinDisplay(isGameOver, winner);
+  TurnDisplay(isGameOver, PeakBoard.NextPlayer);
+
+  From = null;
+  To = null;
+  NextMoves = [];
+  NextMovesCount = 0;
+  FrameButtons = [];
+  FromButton = null;
+  ToButton = null;
+  HintMove = null;
+
+  NextMoves = PeakBoard.MakeMoveList();
+  NextMovesCount = NextMoves.length;
+
+  await NextTurn();
+}
+
+function GetPlayerColor(player) {
+  if (player === Player.White) return "RED";
+  if (player === Player.Black) return "BLUE";
+  return "WHITE";
+}
+
+function GetPlayerName(select) {
+  if (select === "human") return "Human Player";
+  if (select === "random") return "Random";
+  if (select === "minmax1") return "MiniMax One";
+  if (select === "minmax2") return "MiniMax Two";
+  if (select === "minmax3") return "MiniMax Three";
+  if (select === "minmax4") return "MiniMax Four";
+  if (select === "minmax5") return "MiniMax Five";
+  return "WHITE";
 }
 
 function FrameButton(button, frame) {
@@ -956,6 +1045,14 @@ function FrameButton(button, frame) {
     button.classList.add("frame");
   } else {
     button.classList.remove("frame");
+  }
+}
+
+function TurnButton(button, turn) {
+  if (turn == true) {
+    button.classList.add("turn");
+  } else {
+    button.classList.remove("turn");
   }
 }
 
@@ -1077,16 +1174,209 @@ function player_select_change(select) {
   console.log(`RedPlayer: ${RedPlayer} BluePlayer: ${BluePlayer}\n`);
 }
 
+async function NextTurn() {
+  if (GameIsRunning === false) return;
+
+  let currentPlayer = PeakBoard.NextPlayer;
+
+  DrawTitle(
+    `${GetPlayerColor(Player.White)} is ${GetPlayerName(
+      RedPlayer
+    )}              ${GetPlayerColor(Player.Black)} is ${GetPlayerName(
+      BluePlayer
+    )}`
+  );
+
+  if (currentPlayer === Player.White && RedPlayer === "human") return;
+  if (currentPlayer === Player.Black && BluePlayer == "human") return;
+
+  // Waitcursor
+  let bestMove = null;
+  if (currentPlayer === Player.White) {
+    if (RedPlayer === "random") {
+      bestMove = Algorithmn.RandomMove(PeakBoard);
+      if (bestMove != null) console.log(bestMove.toString());
+    } else {
+      let maxDepth = 1;
+      if (RedPlayer === "minmax1") maxDepth = 1;
+      else if (RedPlayer === "minmax2") maxDepth = 2;
+      else if (RedPlayer === "minmax3") maxDepth = 3;
+      else if (RedPlayer === "minmax4") maxDepth = 4;
+      else if (RedPlayer === "minmax5") maxDepth = 5;
+      let depth = 1;
+      if (NextMovesCount > 0) {
+        depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
+        if (depth < 1) depth = 1;
+        if (depth > maxDepth) depth = maxDepth;
+      }
+      let result = Algorithmn.MinMaxMove(PeakBoard, depth);
+      bestMove = result.MOVE;
+      if (bestMove != null) console.log(bestMove.toString());
+    }
+  } else if (currentPlayer === Player.Black) {
+    if (BluePlayer === "random") {
+      bestMove = Algorithmn.RandomMove(PeakBoard);
+      if (bestMove != null) console.log(bestMove.toString());
+    } else {
+      let maxDepth = 1;
+      if (BluePlayer === "minmax1") maxDepth = 1;
+      else if (BluePlayer === "minmax2") maxDepth = 2;
+      else if (BluePlayer === "minmax3") maxDepth = 3;
+      else if (BluePlayer === "minmax4") maxDepth = 4;
+      else if (BluePlayer === "minmax5") maxDepth = 5;
+      let depth = 1;
+      if (NextMovesCount > 0) {
+        depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
+        if (depth < 1) depth = 1;
+        if (depth > maxDepth) depth = maxDepth;
+      }
+      let result = Algorithmn.MinMaxMove(PeakBoard, depth);
+      bestMove = result.MOVE;
+      if (bestMove != null) console.log(bestMove.toString());
+    }
+  }
+
+  // NoWaitcursor
+
+  if (bestMove != null) {
+    await ShowAnimateMove(bestMove, 850);
+
+    PeakBoard.Pass(currentPlayer, false);
+    PeakBoard.DoMove(bestMove);
+    DrawBoard();
+  } else {
+    PeakBoard.Pass(currentPlayer, true);
+    PeakBoard.ChangePlayer();
+    DrawBoard();
+    await WaitNMilliSeconds(500);
+  }
+}
+
+async function go_mouseclick(button) {
+  GameIsRunning = true;
+  ActionButtonEnable(goButton, false);
+  ActionButtonEnable(passButton, true);
+  TurnDisplay(false, PeakBoard.NextPlayer);
+  await NextTurn();
+}
+
+function new_mouseclick(button) {
+  GameIsRunning = false;
+  ActionButtonEnable(goButton, true);
+  ActionButtonEnable(passButton, false);
+  InitGame();
+}
+
+async function pass_mouseclick(button) {
+  let currentPlayer = PeakBoard.NextPlayer;
+  PeakBoard.Pass(currentPlayer, true);
+  PeakBoard.ChangePlayer();
+  DrawBoard();
+  await WaitNMilliSeconds(500);
+  await NextTurn();
+}
+
+async function ShowAnimateMove(bestMove, totaltime) {
+  if (bestMove === null) return;
+
+  for (let i = 0; i < FrameButtons.length; i++) {
+    let frButton = FrameButtons[i];
+    FrameButton(frButton, false);
+  }
+  FrameButtons = [];
+
+  let movePositions = bestMove.GetMovePositions();
+
+  if (movePositions === null || movePositions.length === 0) {
+    return;
+  }
+
+  let count = 2 * movePositions.length - 1;
+  let intervall = Math.round(parseFloat(totaltime) / parseFloat(count));
+  let button = null;
+  let pos = null;
+
+  pos = movePositions[0];
+  button = GetGridElement(pos.Y, pos.X);
+  if (button != null) {
+    button.innerHTML = "0";
+  }
+  pos = movePositions[movePositions.length - 1];
+  button = GetGridElement(pos.Y, pos.X);
+  if (button != null) {
+    button.innerHTML = `${Math.abs(PeakBoard.GetAt(pos.Y, pos.X))}+1`;
+  }
+  for (let i = 0; i < movePositions.length; i++) {
+    pos = movePositions[i];
+    button = GetGridElement(pos.Y, pos.X);
+    if (button != null) {
+      FrameButton(button, true);
+      await WaitNMilliSeconds(intervall);
+    }
+  }
+  for (let i = 0; i < movePositions.length - 1; i++) {
+    pos = movePositions[i];
+    button = GetGridElement(pos.Y, pos.X);
+    if (button != null) {
+      FrameButton(button, false);
+      await WaitNMilliSeconds(intervall);
+    }
+  }
+  pos = movePositions[0];
+  button = GetGridElement(pos.Y, pos.X);
+  if (button != null) {
+    await WaitNMilliSeconds(200);
+  }
+  pos = movePositions[movePositions.length - 1];
+  button = GetGridElement(pos.Y, pos.X);
+  if (button != null) {
+    FrameButton(button, false);
+    await WaitNMilliSeconds(200);
+  }
+}
+
+function DrawTitle(title) {
+  if (title === "" || title === "Peak!") {
+    header.style.fontSize = "100px";
+    header.innerHTML = "Peak!";
+  } else {
+    header.style.fontSize = "30px";
+    header.innerHTML = title;
+  }
+}
+
+// Initial
+let PeakBoard = null;
+let RedPlayer = "human";
+let BluePlayer = "human";
+let GameIsRunning = false;
+let From = null;
+let To = null;
+let NextMoves = [];
+let NextMovesCount = 0;
+let FrameButtons = [];
+let FromButton = null;
+let ToButton = null;
+let HintMove = null;
+
+let header = document.getElementById("peak");
+
+let winLeft = document.getElementById("win_left_item");
+let winRight = document.getElementById("win_right_item");
+let scoreLeft = document.getElementById("score_left_item");
+let scoreRight = document.getElementById("score_right_item");
+let passLeft = document.getElementById("pass_left_item");
+let passRight = document.getElementById("pass_right_item");
+let playerSelectLeft = document.getElementById("player_left_select");
+let playerSelectRight = document.getElementById("player_right_select");
+
+let goButton = document.getElementById("go");
+let newButton = document.getElementById("new");
+let passButton = document.getElementById("pass");
+
+playerSelectLeft.value = "human";
+playerSelectRight.value = "minmax3";
+player_select_change(playerSelectLeft);
+
 // Start
 InitGame();
-
-NextMoves = PeakBoard.MakeMoveList();
-NextMovesCount = NextMoves.length;
-
-/*
-let from = new Position(1, 1, PeakBoard);
-let to = new Position(3, 3, PeakBoard);
-let move = new Move(from, to, PeakBoard);
-let dir = move.GetDirection();
-console.log(dir);
-*/
