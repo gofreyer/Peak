@@ -1482,8 +1482,10 @@ let goButton = document.getElementById("go");
 let newButton = document.getElementById("new");
 let passButton = document.getElementById("pass");
 
-playerSelectLeft.value = RedPlayer;
-playerSelectRight.value = BluePlayer;
-
-// Start
-InitGame();
+if (playerSelectLeft != null && playerSelectRight != null)
+{
+	playerSelectLeft.value = RedPlayer;
+	playerSelectRight.value = BluePlayer;
+	// Start
+	InitGame();
+}
