@@ -13,9 +13,9 @@ async function test() {
   /*
 	call always with async ... await
 	*/
-  console.log('Before sleep function');
+  console.log("Before sleep function");
   await Sleep(3000); // Pauses function for 3 seconds
-  console.log('After sleep function');
+  console.log("After sleep function");
 }
 
 async function WaitNMilliSeconds(milliseconds) {
@@ -441,6 +441,7 @@ class GameBoard {
   Pass(player, setPass) {
     if (setPass == true) {
       this.Passing[player] = this.Passing[player] + 1;
+      console.log("Pass: ", player, " -> ", this.Passing[player]);
     } else {
       this.Passing[player] = 0;
     }
@@ -586,6 +587,8 @@ class GameBoard {
   }
 
   InitBoard() {
+    this.Passing[0] = 0;
+    this.Passing[1] = 0;
     this.NextPlayer = Player.White;
     let chip = this.GetInitValue(this.NextPlayer);
     for (let r = 0; r < DIM; r++) {
@@ -818,7 +821,7 @@ class GameBoard {
   }
 
   toString() {
-    let output = '';
+    let output = "";
     for (let r = 0; r < DIM; r++) {
       for (let c = 0; c < DIM; c++) {
         if (this.GetAt(r, c) < 0) {
@@ -827,7 +830,7 @@ class GameBoard {
           output += `  ${this.GetAt(r, c)} `;
         }
       }
-      output += '\n';
+      output += "\n";
     }
 
     return output;
@@ -836,7 +839,7 @@ class GameBoard {
 
 // Main Window
 function InitGame() {
-  DrawTitle('Peak!');
+  DrawTitle("Peak!");
 
   PeakBoard = new GameBoard(Player.White);
   //console.log(PeakBoard.toString());
@@ -863,18 +866,18 @@ function InitGame() {
 function ActionButtonEnable(action, enable) {
   if (enable === false) {
     action.disabled = true;
-    action.classList.add('action_disabled');
+    action.classList.add("action_disabled");
   } else {
     action.disabled = false;
-    action.classList.remove('action_disabled');
+    action.classList.remove("action_disabled");
   }
 }
 
 function ItemVisible(item, visible) {
   if (visible === true) {
-    item.style.visibility = 'visible';
+    item.style.visibility = "visible";
   } else {
-    item.style.visibility = 'hidden';
+    item.style.visibility = "hidden";
   }
 }
 
@@ -883,35 +886,41 @@ function ScoreBoard(leftscore, rightscore) {
   scoreRight.innerHTML = rightscore.toString();
 
   if (leftscore > rightscore) {
-    scoreLeft.classList.add('winner');
-    scoreLeft.classList.remove('loser');
-    scoreLeft.classList.remove('tied');
+    scoreLeft.classList.add("winner");
+    scoreLeft.classList.remove("loser");
+    scoreLeft.classList.remove("tied");
 
-    scoreRight.classList.remove('winner');
-    scoreRight.classList.add('loser');
-    scoreRight.classList.remove('tied');
+    scoreRight.classList.remove("winner");
+    scoreRight.classList.add("loser");
+    scoreRight.classList.remove("tied");
   } else if (leftscore < rightscore) {
-    scoreLeft.classList.remove('winner');
-    scoreLeft.classList.add('loser');
-    scoreLeft.classList.remove('tied');
+    scoreLeft.classList.remove("winner");
+    scoreLeft.classList.add("loser");
+    scoreLeft.classList.remove("tied");
 
-    scoreRight.classList.add('winner');
-    scoreRight.classList.remove('loser');
-    scoreRight.classList.remove('tied');
+    scoreRight.classList.add("winner");
+    scoreRight.classList.remove("loser");
+    scoreRight.classList.remove("tied");
   } else {
-    scoreLeft.classList.remove('winner');
-    scoreLeft.classList.remove('loser');
-    scoreLeft.classList.add('tied');
+    scoreLeft.classList.remove("winner");
+    scoreLeft.classList.remove("loser");
+    scoreLeft.classList.add("tied");
 
-    scoreRight.classList.remove('winner');
-    scoreRight.classList.remove('loser');
-    scoreRight.classList.add('tied');
+    scoreRight.classList.remove("winner");
+    scoreRight.classList.remove("loser");
+    scoreRight.classList.add("tied");
   }
 }
 
 function PassingDisplay(leftpass, rightpass) {
+  passLeft.innerHTML = "";
+  passRight.innerHTML = "";
   ItemVisible(passLeft, leftpass > 0);
+  if (leftpass > 1) passLeft.innerHTML = "||";
   ItemVisible(passRight, rightpass > 0);
+  if (rightpass > 1) passRight.innerHTML = "||";
+
+  console.log("LeftPass: ", leftpass, "  RightPass: ", rightpass);
 }
 
 function WinDisplay(isGameOver, winner) {
@@ -948,24 +957,24 @@ async function DrawBoard() {
       let button = GetGridElement(row, col);
       if (button != null) {
         let chip = PeakBoard.GetAt(row, col);
-        let val = '';
+        let val = "";
         if (Math.abs(chip) >= 2) {
           val = Math.abs(chip).toString();
         }
         button.innerHTML = val;
 
         if (chip > 0) {
-          button.classList.remove('itemblue');
-          button.classList.remove('itemblank');
-          button.classList.add('itemred');
+          button.classList.remove("itemblue");
+          button.classList.remove("itemblank");
+          button.classList.add("itemred");
         } else if (chip < 0) {
-          button.classList.remove('itemred');
-          button.classList.remove('itemblank');
-          button.classList.add('itemblue');
+          button.classList.remove("itemred");
+          button.classList.remove("itemblank");
+          button.classList.add("itemblue");
         } else {
-          button.classList.remove('itemred');
-          button.classList.remove('itemblue');
-          button.classList.add('itemblank');
+          button.classList.remove("itemred");
+          button.classList.remove("itemblue");
+          button.classList.add("itemblank");
         }
         FrameButton(button, false);
       }
@@ -983,7 +992,7 @@ async function DrawBoard() {
 
   if (GameIsRunning && isGameOver) {
     if (winner == Player.None) {
-      DrawTitle('Tie Game!');
+      DrawTitle("Tie Game!");
     } else {
       theOther = PeakBoard.OtherPlayer(winner);
       let theOtherScore =
@@ -1023,41 +1032,41 @@ async function DrawBoard() {
 }
 
 function GetPlayerColor(player) {
-  if (player === Player.White) return 'RED';
-  if (player === Player.Black) return 'BLUE';
-  return 'WHITE';
+  if (player === Player.White) return "RED";
+  if (player === Player.Black) return "BLUE";
+  return "WHITE";
 }
 
 function GetPlayerName(player) {
-  if (player === 'human') return 'Human Player';
-  if (player === 'random') return 'Random';
-  if (player === 'minmax1') return 'MiniMax One';
-  if (player === 'minmax2') return 'MiniMax Two';
-  if (player === 'minmax3') return 'MiniMax Three';
-  if (player === 'minmax4') return 'MiniMax Four';
-  if (player === 'minmax5') return 'MiniMax Five';
-  return 'WHITE';
+  if (player === "human") return "Human Player";
+  if (player === "random") return "Random";
+  if (player === "minmax1") return "MiniMax One";
+  if (player === "minmax2") return "MiniMax Two";
+  if (player === "minmax3") return "MiniMax Three";
+  if (player === "minmax4") return "MiniMax Four";
+  if (player === "minmax5") return "MiniMax Five";
+  return "WHITE";
 }
 
 function FrameButton(button, frame) {
-  if (frame == true) {
-    button.classList.add('frame');
+  if (frame === true) {
+    button.classList.add("frame");
   } else {
-    button.classList.remove('frame');
+    button.classList.remove("frame");
   }
 }
 
 function TurnButton(button, turn) {
   if (turn == true) {
-    button.classList.add('turn');
+    button.classList.add("turn");
   } else {
-    button.classList.remove('turn');
+    button.classList.remove("turn");
   }
 }
 
 function GetGridElement(row, col) {
   let itemName = `item${row}${col}`;
-  let buttons = document.getElementsByClassName('item');
+  let buttons = document.getElementsByClassName("item");
   for (let i = 0; i < buttons.length; i++) {
     let button = buttons[i];
     if (button.id === itemName) {
@@ -1079,9 +1088,9 @@ function GetButtonGridPosition(sender) {
 
 function MouseIsAllowed() {
   if (!GameIsRunning) return false;
-  if (PeakBoard.NextPlayer === Player.White && RedPlayer != 'human')
+  if (PeakBoard.NextPlayer === Player.White && RedPlayer != "human")
     return false;
-  if (PeakBoard.NextPlayer == Player.Black && BluePlayer != 'human')
+  if (PeakBoard.NextPlayer == Player.Black && BluePlayer != "human")
     return false;
   return true;
 }
@@ -1089,21 +1098,83 @@ function RemoveHint() {}
 
 // User interactions
 function mouse_click_example(obj) {
-  if (obj.classList.contains('itemblue')) {
-    obj.classList.remove('itemblue');
-    obj.classList.add('itemred');
-  } else if (obj.classList.contains('itemred')) {
-    obj.classList.remove('itemred');
-    obj.classList.add('itemblue');
+  if (obj.classList.contains("itemblue")) {
+    obj.classList.remove("itemblue");
+    obj.classList.add("itemred");
+  } else if (obj.classList.contains("itemred")) {
+    obj.classList.remove("itemred");
+    obj.classList.add("itemblue");
   }
 
-  obj.innerHTML = 'X';
-  document.getElementById('debug_output').innerHTML = 'mouse_click ' + obj.id;
+  obj.innerHTML = "X";
+  document.getElementById("debug_output").innerHTML = "mouse_click " + obj.id;
 }
 
 // click
-function button_mouseclick(obj) {
+async function button_mouseclick(obj) {
   if (!MouseIsAllowed()) return;
+
+  let buttonClicked = obj;
+  let row, col;
+  let result = GetButtonGridPosition(buttonClicked);
+  row = result.ROW;
+  col = result.COL;
+
+  if (buttonClicked != null && From == null) {
+    for (let i = 0; i < NextMoves.length; i++) {
+      let move = NextMoves[i];
+      if (move != null && move.From.X === col && move.From.Y === row) {
+        buttonClicked.innerHTML = "1";
+        From = new Position(row, col, PeakBoard);
+        FromButton = buttonClicked;
+        To = null;
+        FrameButtons.push(buttonClicked);
+        FrameButton(buttonClicked, true);
+        return;
+      }
+    }
+  } else if (buttonClicked != null && From != null && To == null) {
+    if (From.X === col && From.Y === row) {
+      // Reset From-Button
+      From = null;
+      for (let b = 0; b < FrameButtons.length; b++) {
+        let button = FrameButtons[b];
+        FrameButton(button, false);
+      }
+      FrameButtons = [];
+      DrawBoard();
+      return;
+    }
+
+    for (let i = 0; i < NextMoves.length; i++) {
+      let move = NextMoves[i];
+      if (
+        move != null &&
+        move.From.X === From.X &&
+        move.From.Y === From.Y &&
+        move.To.X === col &&
+        move.To.Y === row
+      ) {
+        To = new Position(row, col, PeakBoard);
+        ToButton = buttonClicked;
+        let currentPlayer = PeakBoard.NextPlayer;
+
+        PeakBoard.Pass(currentPlayer, false);
+        PeakBoard.DoMove(move);
+
+        await ShowAnimateMove(move, 500);
+
+        for (let b = 0; b < FrameButtons.length; b++) {
+          let button = FrameButtons[b];
+          FrameButton(button, false);
+        }
+        FrameButtons = [];
+
+        DrawBoard();
+        break;
+      }
+    }
+  }
 }
 
 // mouseenter
@@ -1167,9 +1238,9 @@ function button_mouseleave(obj) {
 
 // select_change
 function player_select_change(select) {
-  if (select.id === 'player_left_select') {
+  if (select.id === "player_left_select") {
     RedPlayer = select.value;
-  } else if (select.id === 'player_right_select') {
+  } else if (select.id === "player_right_select") {
     BluePlayer = select.value;
   }
   console.log(`RedPlayer: ${RedPlayer} BluePlayer: ${BluePlayer}\n`);
@@ -1188,25 +1259,25 @@ async function NextTurn() {
     )} is ${GetPlayerName(BluePlayer)}`
   );
 
-  if (currentPlayer === Player.White && RedPlayer === 'human') return;
-  if (currentPlayer === Player.Black && BluePlayer === 'human') return;
+  if (currentPlayer === Player.White && RedPlayer === "human") return;
+  if (currentPlayer === Player.Black && BluePlayer === "human") return;
 
   // Waitcursor
-  root.style.cursor = 'wait';
+  root.style.cursor = "wait";
 
   let bestMove = null;
   if (currentPlayer === Player.White) {
-    if (RedPlayer === 'random') {
+    if (RedPlayer === "random") {
       bestMove = Algorithmn.RandomMove(PeakBoard);
       if (bestMove != null)
         console.log(bestMove.toString(), currentPlayer, RedPlayer);
     } else {
       let maxDepth = 1;
-      if (RedPlayer === 'minmax1') maxDepth = 1;
-      else if (RedPlayer === 'minmax2') maxDepth = 2;
-      else if (RedPlayer === 'minmax3') maxDepth = 3;
-      else if (RedPlayer === 'minmax4') maxDepth = 4;
-      else if (RedPlayer === 'minmax5') maxDepth = 5;
+      if (RedPlayer === "minmax1") maxDepth = 1;
+      else if (RedPlayer === "minmax2") maxDepth = 2;
+      else if (RedPlayer === "minmax3") maxDepth = 3;
+      else if (RedPlayer === "minmax4") maxDepth = 4;
+      else if (RedPlayer === "minmax5") maxDepth = 5;
       let depth = 1;
       if (NextMovesCount > 0) {
         depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
@@ -1220,17 +1291,17 @@ async function NextTurn() {
         console.log(bestMove.toString(), currentPlayer, RedPlayer, depth);
     }
   } else if (currentPlayer === Player.Black) {
-    if (BluePlayer === 'random') {
+    if (BluePlayer === "random") {
       bestMove = Algorithmn.RandomMove(PeakBoard);
       if (bestMove != null)
         console.log(bestMove.toString(), currentPlayer, BluePlayer);
     } else {
       let maxDepth = 1;
-      if (BluePlayer === 'minmax1') maxDepth = 1;
-      else if (BluePlayer === 'minmax2') maxDepth = 2;
-      else if (BluePlayer === 'minmax3') maxDepth = 3;
-      else if (BluePlayer === 'minmax4') maxDepth = 4;
-      else if (BluePlayer === 'minmax5') maxDepth = 5;
+      if (BluePlayer === "minmax1") maxDepth = 1;
+      else if (BluePlayer === "minmax2") maxDepth = 2;
+      else if (BluePlayer === "minmax3") maxDepth = 3;
+      else if (BluePlayer === "minmax4") maxDepth = 4;
+      else if (BluePlayer === "minmax5") maxDepth = 5;
       let depth = 1;
       if (NextMovesCount > 0) {
         depth = Math.round((1.0 / parseFloat(NextMovesCount)) * 80.0);
@@ -1246,7 +1317,7 @@ async function NextTurn() {
   }
 
   // NoWaitcursor
-  root.style.cursor = 'auto';
+  root.style.cursor = "auto";
 
   if (bestMove != null) {
     await ShowAnimateMove(bestMove, 850);
@@ -1280,10 +1351,15 @@ function new_mouseclick(button) {
 async function pass_mouseclick(button) {
   let currentPlayer = PeakBoard.NextPlayer;
   PeakBoard.Pass(currentPlayer, true);
+  PassingDisplay(
+    PeakBoard.Passing[Player.White],
+    PeakBoard.Passing[Player.Black]
+  );
   PeakBoard.ChangePlayer();
+  await WaitNMilliSeconds(200);
   DrawBoard();
-  await WaitNMilliSeconds(500);
-  await NextTurn();
+  /*await WaitNMilliSeconds(500);*/
+  /*await NextTurn();*/
 }
 
 async function ShowAnimateMove(bestMove, totaltime) {
@@ -1309,7 +1385,7 @@ async function ShowAnimateMove(bestMove, totaltime) {
   pos = movePositions[0];
   button = GetGridElement(pos.Y, pos.X);
   if (button != null) {
-    button.innerHTML = '0';
+    button.innerHTML = "0";
   }
   pos = movePositions[movePositions.length - 1];
   button = GetGridElement(pos.Y, pos.X);
@@ -1347,9 +1423,9 @@ async function ShowAnimateMove(bestMove, totaltime) {
 }
 
 function DrawTitle(title) {
-  if (title === '' || title === 'Peak!') {
+  if (title === "" || title === "Peak!") {
     header.style.fontSize = `2.5em`;
-    header.innerHTML = 'Peak!';
+    header.innerHTML = "Peak!";
   } else {
     header.style.fontSize = `1em`;
     header.innerHTML = title;
@@ -1369,7 +1445,7 @@ function getDimensions() {
       ? parseFloat(width) / (1920.0 * 1.33)
       : parseFloat(height) / (1080.0 * 1.33);
 
-  root.style.setProperty('--f', `${unit}`);
+  root.style.setProperty("--f", `${unit}`);
 
   return unit;
 }
@@ -1379,8 +1455,8 @@ let root = document.documentElement;
 let myUnit = getDimensions();
 
 let PeakBoard = null;
-let RedPlayer = 'minmax2';
-let BluePlayer = 'minmax4';
+let RedPlayer = "minmax2";
+let BluePlayer = "minmax4";
 let GameIsRunning = false;
 let From = null;
 let To = null;
@@ -1391,20 +1467,20 @@ let FromButton = null;
 let ToButton = null;
 let HintMove = null;
 
-let header = document.getElementById('peak');
+let header = document.getElementById("peak");
 
-let winLeft = document.getElementById('win_left_item');
-let winRight = document.getElementById('win_right_item');
-let scoreLeft = document.getElementById('score_left_item');
-let scoreRight = document.getElementById('score_right_item');
-let passLeft = document.getElementById('pass_left_item');
-let passRight = document.getElementById('pass_right_item');
-let playerSelectLeft = document.getElementById('player_left_select');
-let playerSelectRight = document.getElementById('player_right_select');
+let winLeft = document.getElementById("win_left_item");
+let winRight = document.getElementById("win_right_item");
+let scoreLeft = document.getElementById("score_left_item");
+let scoreRight = document.getElementById("score_right_item");
+let passLeft = document.getElementById("pass_left_item");
+let passRight = document.getElementById("pass_right_item");
+let playerSelectLeft = document.getElementById("player_left_select");
+let playerSelectRight = document.getElementById("player_right_select");
 
-let goButton = document.getElementById('go');
-let newButton = document.getElementById('new');
-let passButton = document.getElementById('pass');
+let goButton = document.getElementById("go");
+let newButton = document.getElementById("new");
+let passButton = document.getElementById("pass");
 
 playerSelectLeft.value = RedPlayer;
 playerSelectRight.value = BluePlayer;

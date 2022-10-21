@@ -140,7 +140,7 @@ body {
 }
 
 .frame {
-  border: calc(4px * var(--f)) solid yellow;
+  border: calc(6px * var(--f)) solid yellow;
   box-shadow: 0 0.5em 0.5em -0.3em black;
   transform: translateY(-0.25em);
   color: white;
@@ -202,6 +202,8 @@ body {
   width: calc(40px * var(--f));
   height: calc(40px * var(--f));
   border-radius: calc(15px * var(--f));
+  font-size: calc(20px * var(--f));
+  font-weight: 1000;
 }
 
 .itemwin {
