@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peak!</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="panel_left" class="panel">
+        <div id="win_left" class="box"></div>
+        <div id="score_left" class="box"></div>
+        <div id="pass_left" class="box"></div>
+        <div id="select_left" class="box"></div>
+      </div>
+      <div id="wrapper" class="box">
+        <div id="middle">
+          <div id="peak" class="bbox">Peak!</div>
+          <div id="impressum">
+            <div class="banner intro">
+              <h1 class="title">Impressum und Datenschutz</h1>
+            </div>
+
+            <h2 class="nav subtitle">Impressum</h2>
+            <div>
+              Github-Account <a href="https://github.com/gofreyer">@gofreyer</a>
+            </div>
+            <p>
+              <img
+                id="address"
+                alt="Geerd-Olaf Freyer"
+                src="../img/impressum.PNG"
+                width="140"
+                height="70"
+              />
+            </p>
+
+            <h2 class="nav subtitle">Datenschutz</h2>
+            <p>
+              Ich sammle keinerlei Daten.<br />Diese Seite enthält keine
+              verlinkten Ressourcen, welche Tracking auslösen können.
+            </p>
+            <p>
+              Die Schriftart
+              <strong
+                ><a
+                  href="https://gitlab.com/bonjour-monde/fonderie/syne-typeface"
+                  >Syne</a
+                ></strong
+              >
+              wird als lokale Ressource geladen.
+            </p>
+            <p>
+              Die Seite ist auf Github Pages gehostet, wobei ich keinen Einfluss
+              darauf habe, welche Daten von Github gesammelt werden.<br />Bitte
+              beachten Sie dazu die entsprechenden Informationen auf
+              <a href="https://github.com/">github.com</a>.<br />Github sammelt
+              personenbezogene Informationen von Besuchern, u.a. die IP, um
+              gesetzliche Bestimmungen zu erfüllen und die Sicherheit und
+              Integrität der Website und der Dienstleistung zu gewährleisten.
+            </p>
+            <p>
+              Die Seite bindet keine direkten Javascript- und CSS-Dateien von
+              externen Quellen ein.<br />
+              Falls über Github Einbindungen stattfinden, habe ich keine
+              Kontrolle über mögliches Tracking, das dadurch verursacht wird.
+            </p>
+            <h2 class="nav subtitle">Haftungshinweis</h2>
+            <p>
+              Ich übernehme keine Haftung für die Inhalte externer Links.<br />Für
+              den Inhalt der verlinkten Seiten sind ausschließlich deren
+              Betreiber verantwortlich.
+            </p>
+            <h2 class="nav subtitle">Ursprung</h2>
+            <p>
+              Eine Computerspiel-Umsetzung des Brettspiels "Peak" von Andreas
+              Kuhnekath-Häbler
+            </p>
+
+            <p>
+              Das Holzbrettspiel "Peak" ist ein 2-Personen-Spiel von Andreas
+              Kuhnekath-Häbler, erschienen bei Gerhards Spiel und Design:
+            </p>
+            <p>
+              <a
+                href="https://www.spielewerkstatt.eu/de/startseite/187-peak.html"
+                >https://www.spielewerkstatt.eu/de/startseite/187-peak.html</a
+              >
+            </p>
+            <p>
+              In einer vorläufigen C#-WPF-Implementierung und dann auch in
+              dieser Vanilla-Javascript-Webanwendung (die ziemlich direkt auf
+              meinem
+              <a href="https://github.com/gofreyer/Peak"> C#-Code</a> aufbaut)
+              bewegt sich das Spiel weg vom Turmbau hin zu einer abstrakteren
+              Art des Addierens von Zahlen.
+            </p>
+            <p>
+              Auf der niedrigsten Spielstufe kann ein einfacher
+              Zufallsalgorithmus als Computergegner eingestellt werden. Für
+              höhere Spielstufen kann der Minimax-Algorithmus (mit
+              unterschiedlichen Suchbaumtiefen) als Computergegner dienen. Der
+              Minimax-Algorithmus ist ein Algorithmus zur Bestimmung der
+              optimalen Spielstrategie für endliche
+              Zwei-Personen-Nullsummenspiele mit perfekter Information.
+              <a href="https://en.wikipedia.org/wiki/Minimax">Wikipedia</a>
+            </p>
+            <p>
+              Unbeschriftete farbige Felder haben den Wert 1. Im Wechsel der
+              Farbe auf einem 6x6-Gitter kann genau ein Ursprungsfeld mit dem
+              anfänglichen Zahlenwert 1 auf genau ein anderes Zielfeld mit einem
+              Zahlenwert einer beliebigen Farbe verschoben werden. Der
+              Zahlenwert des Zielfeldes wird dann um 1 erhöht und es erhält die
+              Farbe des Ursprungsfeldes, das seinerseits leer und farblos
+              bleibt. Als zwingende Bedingung darf dieser Zug nur diagonal oder
+              orthogonal über Zwischenfelder (beliebiger Farbe oder auch leer)
+              mit einem Gesamtwert von 2 erfolgen. Das Zielfeld muss mit einem
+              Wert größer oder gleich 1 gefärbt sein.
+            </p>
+            <p>
+              Durch das Verschieben der Zahlenwerte auf diese Weise entstehen
+              schrittweise höhere Zahlenwerte der jeweiligen Zugfarben. Von
+              einem Feld mit einem Zahlenwert größer als 1 kann kein Zug
+              ausgeführt werden. So kommt es häufig vor, dass ein Zug von einem
+              Feld nur einmal im Spiel ausgeführt wird.
+            </p>
+            <p>
+              Wer nach den Regeln nicht ziehen kann, muss passen. Wenn der
+              nachfolgende Zug des anderen Spielers neue Möglichkeiten bietet,
+              geht das Spiel weiter. Wenn nicht, endet das Spiel. Für jedes
+              Zahlenfeld einer Farbe, dessen Wert größer oder gleich 2 ist,
+              erhält man die entsprechenden Farbpunkte. Der Spieler, der die
+              meisten hat, gewinnt das Spiel.
+            </p>
+          </div>
+          <div class="bbox">
+            <div class="nav action_button">
+              <a href="../index.html">Zurück zu Peak!</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="panel_right" class="panel">
+        <div id="win_right" class="box"></div>
+        <div id="score_right" class="box"></div>
+        <div id="pass_right" class="box"></div>
+        <div id="select_right" class="box"></div>
+      </div>
+    </div>
+    <script src="../js/script.js"></script>
+    <noscript>You need to enable JavaScript to view the full site.</noscript>
+  </body>
+</html>

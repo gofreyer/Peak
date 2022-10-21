@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peak!</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="icon" type="image/x-icon" href="./img/favicon.ico" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="panel_left" class="panel">
+        <div id="win_left" class="box">
+          <div id="win_left_item" class="item itemwin"></div>
+        </div>
+        <div id="score_left" class="box">
+          <div id="score_left_item" class="item itemred winner"></div>
+        </div>
+        <div id="pass_left" class="box">
+          <div id="pass_left_item" class="item itemred pass"></div>
+        </div>
+        <div id="select_left" class="box">
+          <select
+            name="player_left"
+            id="player_left_select"
+            class="player_select"
+            onchange="player_select_change(this)"
+          >
+            <option value="human">Human Player</option>
+            <option value="random">Random</option>
+            <option value="minmax1">MiniMax 1</option>
+            <option value="minmax2">MiniMax 2</option>
+            <option value="minmax3">MiniMax 3</option>
+            <option value="minmax4">MiniMax 4</option>
+            <option value="minmax5">MiniMax 5</option>
+          </select>
+        </div>
+      </div>
+      <div id="wrapper" class="box">
+        <div id="middle">
+          <div id="peak" class="bbox">Peak!</div>
+          <div id="board">
+            <div
+              id="item00"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item00 row0 col0"
+            ></div>
+            <div
+              id="item01"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item01 row0 col1"
+            ></div>
+            <div
+              id="item02"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item02 row0 col2"
+            ></div>
+            <div
+              id="item03"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item03 row0 col3"
+            ></div>
+            <div
+              id="item04"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item04 row0 col4"
+            ></div>
+            <div
+              id="item05"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item05 row0 col5"
+            ></div>
+
+            <div
+              id="item10"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item10 row1 col0"
+            ></div>
+            <div
+              id="item11"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item11 row1 col1"
+            ></div>
+            <div
+              id="item12"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item12 row1 col2"
+            ></div>
+            <div
+              id="item13"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item13 row1 col3"
+            ></div>
+            <div
+              id="item14"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item14 row1 col4"
+            ></div>
+            <div
+              id="item15"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item15 row1 col5"
+            ></div>
+
+            <div
+              id="item20"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item20 row2 col0"
+            ></div>
+            <div
+              id="item21"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item21 row2 col1"
+            ></div>
+            <div
+              id="item22"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item22 row2 col2"
+            ></div>
+            <div
+              id="item23"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item23 row2 col3"
+            ></div>
+            <div
+              id="item24"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item24 row2 col4"
+            ></div>
+            <div
+              id="item25"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item25 row2 col5"
+            ></div>
+
+            <div
+              id="item30"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item30 row3 col0"
+            ></div>
+            <div
+              id="item31"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item31 row3 col1"
+            ></div>
+            <div
+              id="item32"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item32 row3 col2"
+            ></div>
+            <div
+              id="item33"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item33 row3 col3"
+            ></div>
+            <div
+              id="item34"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item34 row3 col4"
+            ></div>
+            <div
+              id="item35"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item35 row3 col5"
+            ></div>
+
+            <div
+              id="item40"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item40 row4 col0"
+            ></div>
+            <div
+              id="item41"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item41 row4 col1"
+            ></div>
+            <div
+              id="item42"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item42 row4 col2"
+            ></div>
+            <div
+              id="item43"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item43 row4 col3"
+            ></div>
+            <div
+              id="item44"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item44 row4 col4"
+            ></div>
+            <div
+              id="item45"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item45 row4 col5"
+            ></div>
+
+            <div
+              id="item50"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item50 row5 col0"
+            ></div>
+            <div
+              id="item51"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item51 row5 col1"
+            ></div>
+            <div
+              id="item52"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item52 row5 col2"
+            ></div>
+            <div
+              id="item53"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item53 row5 col3"
+            ></div>
+            <div
+              id="item54"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item54 row5 col4"
+            ></div>
+            <div
+              id="item55"
+              onclick="button_mouseclick(this)"
+              onmouseenter="button_mouseenter(this)"
+              onmousemove="button_mousemove(this)"
+              onmouseleave="button_mouseleave(this)"
+              class="item item55 row5 col5"
+            ></div>
+          </div>
+          <div id="actions" class="bbox">
+            <button
+              id="go"
+              class="action_button action_disabled"
+              onclick="go_mouseclick(this)"
+            >
+              Go
+            </button>
+            <button
+              id="new"
+              class="action_button"
+              onclick="new_mouseclick(this)"
+            >
+              New
+            </button>
+            <button
+              id="pass"
+              class="action_button action_disabled"
+              onclick="pass_mouseclick(this)"
+            >
+              Pass
+            </button>
+          </div>
+          <div class="bbox">
+            <div class="small_link">
+              <a href="./pages/impressum.html">Imprint</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="panel_right" class="panel">
+        <div id="win_right" class="box">
+          <div id="win_right_item" class="item itemwin"></div>
+        </div>
+        <div id="score_right" class="box">
+          <div id="score_right_item" class="item itemblue loser"></div>
+        </div>
+        <div id="pass_right" class="box">
+          <div id="pass_right_item" class="item itemblue pass"></div>
+        </div>
+        <div id="select_right" class="box">
+          <select
+            name="player_right"
+            id="player_right_select"
+            class="player_select"
+            onchange="player_select_change(this)"
+          >
+            <option value="human">Human Player</option>
+            <option value="random">Random</option>
+            <option value="minmax1">MiniMax 1</option>
+            <option value="minmax2">MiniMax 2</option>
+            <option value="minmax3">MiniMax 3</option>
+            <option value="minmax4">MiniMax 4</option>
+            <option value="minmax5">MiniMax 5</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <!--div id="debug_output"></div-->
+    <script src="./js/script.js"></script>
+    <noscript>You need to enable JavaScript to view the full site.</noscript>
+  </body>
+</html>
