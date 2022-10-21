@@ -5,6 +5,20 @@
   src: url(../fonts/SyneMono-Regular.woff2) format('woff2');
 }
 
+body {
+  background-color: #3b404e;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+}
+
+body.waiting * {
+  cursor: progress;
+}
+
 #board {
   margin-bottom: calc(50px * var(--f));
   margin-top: calc(50px * var(--f));
@@ -43,18 +57,10 @@
 .middle {
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: 1fr 10fr 1fr;
+  grid-template-rows: 2fr 8fr 2fr 1fr;
 }
 
 /* OTHER STYLES */
-
-body {
-  background-color: #3b404e;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 #container {
   display: grid;
@@ -172,6 +178,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 1em;
+  text-align: center;
+
 }
 
 .tied {
@@ -246,7 +256,7 @@ body {
 }
 
 .action_button {
-  font-size: 0.3em;
+  font-size: calc(15px * var(--f));
   font-weight: 300;
   padding: 0.8em;
   margin: 1.1em;
@@ -288,4 +298,58 @@ body {
   font-size: 2.5em;
   font-weight: 500;
   font-style: italic;
+}
+
+#impressum {
+  font-family: 'Syne', sans-serif;
+  font-size: calc(14px * var(--f));
+  text-align: center;
+}
+
+.banner {
+  font-size: 0.5em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin-top: 0.2em;
+}
+.intro {
+  background: #3b404e;
+  color: #eee8a9;
+  padding: 5px 0;
+  border-radius: 2em;
+}
+.subtitle {
+  font-size: 0.8em;
+  color: #eee8a9;
+  padding: 5px 0;
+  border-radius: 2em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin-top: 0.1em;
+}
+.nav {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+  margin-top: calc(10px * var(--f));
+  /*
+  margin-bottom: 20px;
+  */
+}
+a {
+  color:#ebe175;
+  text-decoration: none;
+  transition: text-decoration 0.5s;
+}
+
+a:hover {
+  text-decoration: underline wavy #eee8a9;
+}
+.small_link {
+  margin-top: 2em;
+  font-size: calc(12px * var(--f));
 }
