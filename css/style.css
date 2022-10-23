@@ -20,23 +20,20 @@ body.waiting * {
 }
 
 #board {
-  margin-bottom: calc(50px * var(--f));
-  margin-top: calc(50px * var(--f));
+  margin-bottom: 1vw;
+  margin-top: 1vw;
   display: grid;
-  grid-template-columns:
-    calc(115px * var(--f)) calc(115px * var(--f)) calc(115px * var(--f))
-    calc(115px * var(--f)) calc(115px * var(--f)) calc(115px * var(--f));
+  grid-template-columns: 8vh 8vh 8vh 8vh 8vh 8vh;
   grid-template-rows:
-    calc(115px * var(--f)) calc(115px * var(--f)) calc(115px * var(--f))
-    calc(115px * var(--f)) calc(115px * var(--f)) calc(115px * var(--f));
-  grid-gap: 1rem;
+  8vh 8vh 8vh 8vh 8vh 8vh;
+  grid-gap: 0.5vh;
   grid-area: board;
 }
 
 .panel {
   display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 20vw;
+  grid-template-rows: 20vh 50vh 20vh 10vh;
 }
 
 #panel_left {
@@ -56,19 +53,17 @@ body.waiting * {
 
 .middle {
   display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 2fr 8fr 2fr 1fr;
+  grid-template-columns: 50vw;
+  grid-template-rows: 20vh 50vh 20vh 10vh;
 }
 
 /* OTHER STYLES */
 
 #container {
   display: grid;
-  grid-gap: calc(10px * var(--f));
-  grid-template-columns: calc(400px * var(--f)) calc(1200px * var(--f)) calc(
-      400px * var(--f)
-    );
-  grid-template-rows: 95vh;
+  grid-gap: 0vw;
+  grid-template-columns: 20vw 50vw 20vw;
+  grid-template-rows: 100vh;
   grid-template-areas: 'panel_left wrapper panel_right';
 }
 
@@ -80,11 +75,11 @@ body.waiting * {
     #1eaafc 85%,
     #3edfd7 100%
   );
-  box-shadow: 0 calc(10px * var(--f)) calc(20px * var(--f)) rgba(0, 0, 0, 0.19),
-    0 calc(6px * var(--f)) calc(6px * var(--f)) rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
-  border-radius: calc(10px * var(--f));
-  border: calc(2px * var(--f)) solid #171717;
+  border-radius: 10px;
+  border: 2px solid #171717;
   display: flex;
   /*this centers the text horizontally*/
   justify-content: center;
@@ -95,11 +90,11 @@ body.waiting * {
 .itemblue {
   background-color: blue;
   background-image: linear-gradient(130deg, blue 0%, blue 20%, white 100%);
-  box-shadow: 0 calc(10px * var(--f)) calc(20px * var(--f)) rgba(0, 0, 0, 0.19),
-    0 calc(6px * var(--f)) calc(6px * var(--f)) rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
-  border-radius: calc(10px * var(--f));
-  border: calc(2px * var(--f)) solid #171717;
+  border-radius: 10px;
+  border: 2px solid #171717;
   display: flex;
   /*this centers the text horizontally*/
   justify-content: center;
@@ -110,11 +105,11 @@ body.waiting * {
 .itemred {
   background-color: red;
   background-image: linear-gradient(130deg, red 0%, red 20%, white 100%);
-  box-shadow: 0 calc(10px * var(--f)) calc(20px * var(--f)) rgba(0, 0, 0, 0.19),
-    0 calc(6px * var(--f)) calc(6px * var(--f)) rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
-  border-radius: calc(10px * var(--f));
-  border: calc(2px * var(--f)) solid #171717;
+  border-radius: 10px;
+  border: 2px solid #171717;
   display: flex;
   /*this centers the text horizontally*/
   justify-content: center;
@@ -124,15 +119,15 @@ body.waiting * {
 
 .itemblank {
   background-color: #0d1f50;
-  box-shadow: 0 calc(10px * var(--f)) calc(20px * var(--f)) rgba(0, 0, 0, 0.19),
-    0 calc(6px * var(--f)) calc(6px * var(--f)) rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
-  border-radius: calc(10px * var(--f));
-  border: calc(2px * var(--f)) solid #171717;
+  border-radius: 10px;
+  border: 2px solid #171717;
 }
 
 .item {
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: 500;
   font-family: 'Syne', sans-serif;
   transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
@@ -146,14 +141,14 @@ body.waiting * {
 }
 
 .frame {
-  border: calc(6px * var(--f)) solid yellow;
+  border: 3px solid yellow;
   box-shadow: 0 0.5em 0.5em -0.3em black;
   transform: translateY(-0.25em);
   color: white;
 }
 
 .turn {
-  border: calc(4px * var(--f)) solid yellow;
+  border: 5px solid yellow;
   box-shadow: 0 0.5em 0.5em -0.3em black;
   transform: translateY(-0.25em);
   color: white;
@@ -162,10 +157,10 @@ body.waiting * {
 .box {
   background-color: #0d1f50;
   color: #fff;
-  border-radius: calc(10px * var(--f));
+  border-radius: 10px ;
   border: 1px solid #171717;
-  padding: calc(10px * var(--f));
-  font-size: 150%;
+  padding: 10px;
+  font-size: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -173,8 +168,8 @@ body.waiting * {
 .bbox {
   background-color: #0d1f50;
   color: #fff;
-  padding: calc(10px * var(--f));
-  font-size: 150%;
+  padding: 10px;
+  font-size: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -185,47 +180,47 @@ body.waiting * {
 }
 
 .tied {
-  width: calc(200px * var(--f));
-  height: calc(200px * var(--f));
+  width: 12vw;
+  height: 12vw;
   font-size: 1.5em;
   font-weight: 500;
   font-family: 'Syne', sans-serif;
 }
 
 .winner {
-  width: calc(250px * var(--f));
-  height: calc(250px * var(--f));
-  font-size: calc(60px * var(--f));
+  width: 15vw;
+  height: 15vw;
+  font-size: 1.5em;
   font-weight: 500;
   font-family: 'Syne', sans-serif;
 }
 
 .loser {
-  width: calc(150px * var(--f));
-  height: calc(150px * var(--f));
+  width: 9vw;
+  height: 9vw;
   font-size: 1.5em;
   font-weight: 500;
   font-family: 'Syne', sans-serif;
 }
 
 .pass {
-  width: calc(40px * var(--f));
-  height: calc(40px * var(--f));
-  border-radius: calc(15px * var(--f));
-  font-size: calc(20px * var(--f));
+  width: 2vw;
+  height: 2vw;
+  border-radius: 15px;
+  font-size: 0.3em;
   font-weight: 1000;
 }
 
 .itemwin {
-  width: calc(100px * var(--f));
-  height: calc(100px * var(--f));
-  border-radius: calc(40px * var(--f));
+  width: 15vh;
+  height: 15vh;
+  border-radius: 5vh;
   background-color: goldenrod;
   background-image: linear-gradient(130deg, goldenrod 0%, gold 20%, white 100%);
-  box-shadow: 0 calc(10px * var(--f)) calc(20px * var(--f)) rgba(0, 0, 0, 0.19),
-    0 calc(6px * var(--f)) calc(6px * var(--f)) rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   color: #fff;
-  border: calc(2px * var(--f)) solid #171717;
+  border: 2px solid #171717;
 }
 
 .player_select {
@@ -245,7 +240,7 @@ body.waiting * {
   border: 1px solid;
   border-radius: 0.5em;
   transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  width: calc(250px * var(--f));
+  width: 17vw;
   vertical-align: bottom;
 }
 .player_select:hover {
@@ -256,10 +251,10 @@ body.waiting * {
 }
 
 .action_button {
-  font-size: calc(15px * var(--f));
+  font-size: 80%;
   font-weight: 300;
-  padding: 0.8em;
-  margin: 1.1em;
+  padding: 0vw;
+  margin: 1vw;
   background-color: #3b404e;
   background-image: linear-gradient(
     130deg,
@@ -270,9 +265,10 @@ body.waiting * {
   color: #eee8a9;
   font-family: 'Syne', sans-serif;
   border: 1px solid;
-  border-radius: 1em;
+  border-radius: 2vw;
   transition: color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  width: calc(150px * var(--f));
+  width: 6vw;
+  height: 5vh;
 }
 
 .action_disabled {
@@ -295,14 +291,14 @@ body.waiting * {
 
 #peak {
   font-family: 'Syne', sans-serif;
-  font-size: 2.5em;
+  font-size: 100%;
   font-weight: 500;
   font-style: italic;
 }
 
 #impressum {
   font-family: 'Syne', sans-serif;
-  font-size: calc(14px * var(--f));
+  font-size: 50%;
   text-align: center;
 }
 
