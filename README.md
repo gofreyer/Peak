@@ -20,12 +20,12 @@ https://en.wikipedia.org/wiki/Minimax
 
 <figure>
     <figcaption><strong>PeakDesktop: Human player against the computer at minimax depth 5</strong></figcaption>
-    <img src="https://github.com/gofreyer/Peak/blob/main/PeakDesktop/PeakScreenShot.PNG" height="525" width="750">
+    <img src="https://github.com/gofreyer/Peak/blob/main/PeakDesktop/PeakScreenShot.PNG" height="500" width="800">
 </figure>
 
 <figure>
-    <figcaption><strong>Peakweb: Computer player at minimax depth 1 against the computer player  at minimax depth 5</strong></figcaption>
-    <img src="https://github.com/gofreyer/Peak/blob/main/img/PeakWebScreenShot.png" height="525" width="750">
+    <figcaption><strong>PeakWeb: Computer player at minimax depth 1 against the computer player  at minimax depth 5</strong></figcaption>
+    <img src="https://github.com/gofreyer/Peak/blob/main/img/PeakWebScreenShot.png" height="500" width="800">
 </figure>
 
 <p>Unlabelled coloured fields have a value of 1. In alternation of the colour on a 6x6 grid, exactly one origin field with the initial numerical value of 1 may be moved to exactly one other target field with a numerical value of any colour. The numerical value of the target field is then increased by 1 and it is given the colour of the original field, which itself then remains empty and colourless. As a compulsory condition, this move may only be made diagonally or orthogonally across intermediate squares (of any colour or even empty) with a total summed up value of 2. The target field has to be coloured with a value greater or equal to 1. 
