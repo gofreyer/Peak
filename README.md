@@ -9,7 +9,7 @@ The game <strong>Peak</strong>
 
 The wooden board game "Peak" is a 2-person game by Andreas Kuhnekath-Häbler and published by Gerhards Spiel und Design.
 
-For the time being, in my preliminary first C# WPF implementation of this board game and then also in the vanilla javascript web application (developed quite directly from the C# code base and transferred to Javascript) which can be found <a href="https://gofreyer.github.io/Peak/">here</a> under https://gofreyer.github.io/Peak/ the game moves away from building towers to a more abstract way of adding up numbers.
+For the time being, in my preliminary C# WPF implementation of this board game and then also in the vanilla javascript web application (developed quite directly from the C# code base and transferred to Javascript) which can be found <a href="https://gofreyer.github.io/Peak/">here</a> under https://gofreyer.github.io/Peak/ the game moves away from building towers to a more abstract way of adding up numbers.
 
 A simple random algorithm can be set as the computer opponent at the lowest game level. For higher game levels, the minimax algorithm (with different search tree depths) can serve as a computer opponent. The minimax algorithm is an algorithm for determining the optimal game strategy for finite two-person zero-sum games with perfect information.
 https://en.wikipedia.org/wiki/Minimax
