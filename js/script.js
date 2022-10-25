@@ -1159,10 +1159,10 @@ async function button_mouseclick(obj) {
         ToButton = buttonClicked;
         let currentPlayer = PeakBoard.NextPlayer;
 
+        await ShowAnimateMove(move, 500);
+
         PeakBoard.Pass(currentPlayer, false);
         PeakBoard.DoMove(move);
-
-        await ShowAnimateMove(move, 500);
 
         for (let b = 0; b < FrameButtons.length; b++) {
           let button = FrameButtons[b];
@@ -1482,10 +1482,9 @@ let goButton = document.getElementById("go");
 let newButton = document.getElementById("new");
 let passButton = document.getElementById("pass");
 
-if (playerSelectLeft != null && playerSelectRight != null)
-{
-	playerSelectLeft.value = RedPlayer;
-	playerSelectRight.value = BluePlayer;
-	// Start
-	InitGame();
+if (playerSelectLeft != null && playerSelectRight != null) {
+  playerSelectLeft.value = RedPlayer;
+  playerSelectRight.value = BluePlayer;
+  // Start
+  InitGame();
 }
